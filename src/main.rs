@@ -1,13 +1,17 @@
+fn fizzbuzz(n: i64) -> String {
+    if n % 3 == 0 && n % 5 == 0 {
+        String::from("fizzbuzz")
+    } else if n % 3 == 0 {
+        String::from("fizz")
+    } else if n % 5 == 0 {
+        String::from("buzz")
+    } else {
+        format!("{}", n)
+    }
+}
+
 fn main() {
     for i in 1..100 {
-        if i % 3 == 0 && i % 5 == 0 {
-            println!("fizzbuzz");
-        } else if i % 3 == 0 {
-            println!("fizz");
-        } else if i % 5 == 0 {
-            println!("buzz");
-        } else {
-            println!("{}", i);
-        }
+       println!("{}", fizzbuzz(i));
     }
 }
