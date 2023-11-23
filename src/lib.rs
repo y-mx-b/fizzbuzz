@@ -1,11 +1,9 @@
-pub fn fizzbuzz(n: i64) -> String {
-    if n % 3 == 0 && n % 5 == 0 {
-        String::from("fizzbuzz")
-    } else if n % 3 == 0 {
-        String::from("fizz")
-    } else if n % 5 == 0 {
-        String::from("buzz")
-    } else {
-        format!("{}", n)
-    }
+use std::fmt;
+
+pub trait FizzBuzzed: fmt::Display {
+    fn from(n: i64) -> Self;
+}
+
+pub fn fizzbuzz<O: FizzBuzzed>(n: i64) -> O {
+    O::from(n)
 }
