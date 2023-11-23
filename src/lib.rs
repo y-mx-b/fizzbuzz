@@ -1,9 +1,9 @@
 use std::fmt;
 
-pub trait FizzBuzzed: fmt::Display {
-    fn from(n: i64) -> Self;
+pub trait FizzBuzzed: fmt::Display + Sized + Clone {
+    fn from(n: i64) -> Vec<Self>;
 }
 
-pub fn fizzbuzz<O: FizzBuzzed>(n: i64) -> O {
+pub fn fizzbuzz<O: FizzBuzzed>(n: i64) -> Vec<O> {
     O::from(n)
 }
