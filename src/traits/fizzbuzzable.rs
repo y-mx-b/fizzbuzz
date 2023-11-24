@@ -5,122 +5,27 @@ pub trait FizzBuzzable<O: FizzBuzzed<Self>>: Clone + PartialEq + PartialOrd {
     fn pred(&self) -> Self;
 }
 
-impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for i8 {
-    fn succ(&self) -> Self {
-        self + 1
-    }
+macro_rules! impl_fizzbuzzable {
+    ($type:ty) => {
+        impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for $type {
+            fn succ(&self) -> Self {
+                self + 1
+            }
 
-    fn pred(&self) -> Self {
-        self - 1
+            fn pred(&self) -> Self {
+                self - 1
+            }
+        }
     }
 }
 
-impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for i16 {
-    fn succ(&self) -> Self {
-        self + 1
-    }
-
-    fn pred(&self) -> Self {
-        self - 1
-    }
-}
-
-impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for i32 {
-    fn succ(&self) -> Self {
-        self + 1
-    }
-
-    fn pred(&self) -> Self {
-        self - 1
-    }
-}
-
-impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for i64 {
-    fn succ(&self) -> Self {
-        self + 1
-    }
-
-    fn pred(&self) -> Self {
-        self - 1
-    }
-}
-
-impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for i128 {
-    fn succ(&self) -> Self {
-        self + 1
-    }
-
-    fn pred(&self) -> Self {
-        self - 1
-    }
-}
-
-impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for isize {
-    fn succ(&self) -> Self {
-        self + 1
-    }
-
-    fn pred(&self) -> Self {
-        self - 1
-    }
-}
-
-impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for u8 {
-    fn succ(&self) -> Self {
-        self + 1
-    }
-
-    fn pred(&self) -> Self {
-        self - 1
-    }
-}
-
-impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for u16 {
-    fn succ(&self) -> Self {
-        self + 1
-    }
-
-    fn pred(&self) -> Self {
-        self - 1
-    }
-}
-
-impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for u32 {
-    fn succ(&self) -> Self {
-        self + 1
-    }
-
-    fn pred(&self) -> Self {
-        self - 1
-    }
-}
-
-impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for u64 {
-    fn succ(&self) -> Self {
-        self + 1
-    }
-
-    fn pred(&self) -> Self {
-        self - 1
-    }
-}
-
-impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for u128 {
-    fn succ(&self) -> Self {
-        self + 1
-    }
-
-    fn pred(&self) -> Self {
-        self - 1
-    }
-}
-
-impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for usize {
-    fn succ(&self) -> Self {
-        self + 1
-    }
-
-    fn pred(&self) -> Self {
-        self - 1
-    }
-}
+impl_fizzbuzzable!(i8);
+impl_fizzbuzzable!(i16);
+impl_fizzbuzzable!(i32);
+impl_fizzbuzzable!(i64);
+impl_fizzbuzzable!(i128);
+impl_fizzbuzzable!(u8);
+impl_fizzbuzzable!(u16);
+impl_fizzbuzzable!(u32);
+impl_fizzbuzzable!(u64);
+impl_fizzbuzzable!(u128);
