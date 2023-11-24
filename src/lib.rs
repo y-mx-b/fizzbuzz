@@ -1,10 +1,10 @@
-pub mod iter;
-pub mod traits;
 pub mod builder;
 pub mod default;
+pub mod iter;
+pub mod traits;
 
-pub use traits::{FizzBuzzable, FizzBuzzed};
 pub use builder::FizzBuzzBuilder;
+pub use traits::{FizzBuzzable, FizzBuzzed};
 
 use crate::iter::FizzBuzzIter;
 use std::collections::BTreeMap;

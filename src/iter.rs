@@ -9,9 +9,7 @@ pub struct FizzBuzzIter<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>> {
     pub(crate) rule: &'a dyn Fn(I, I) -> bool,
 }
 
-impl<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>> Iterator
-    for FizzBuzzIter<'a, I, O>
-{
+impl<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>> Iterator for FizzBuzzIter<'a, I, O> {
     type Item = Vec<O>;
 
     fn next(&mut self) -> Option<Self::Item> {

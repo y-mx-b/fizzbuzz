@@ -1,5 +1,5 @@
-use fizzbuzz::FizzBuzzBuilder;
 use fizzbuzz::traits::*;
+use fizzbuzz::FizzBuzzBuilder;
 
 fn main() {
     let fb = FizzBuzzBuilder::new().build();
