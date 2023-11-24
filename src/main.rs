@@ -20,13 +20,10 @@ impl fmt::Display for Output {
 }
 
 impl FizzBuzzed for Output {
-    fn from(n: i64) -> Vec<Self> {
-        let divisors = [3, 5];
-        let rule = |n : i64, divis: i64| n % divis == 0;
-        let map = BTreeMap::from([(3, Output::Fizz), (5, Output::Buzz)]);
+    fn from(n: i64, map: &BTreeMap<i64, Self>, rule: impl Fn(i64, i64) -> bool) -> Vec<Self> {
         let mut output = Vec::new();
 
-        for &divis in divisors.iter() {
+        for &divis in map.keys() {
             if rule(n, divis) {
                 output.push(map.get(&divis).unwrap().clone());
             }
@@ -41,7 +38,10 @@ impl FizzBuzzed for Output {
 }
 
 fn main() {
-    for i in 1..100 {
-       println!("{}", fizzbuzz::<Output>(i).iter().map(|o| o.to_string()).collect::<Vec<String>>().join(""));
+    let rule = |n : i64, divis: i64| n % divis == 0;
+    let map = BTreeMap::from([(3, Output::Fizz), (5, Output::Buzz)]);
+
+    for i in 1..=100 {
+       println!("{}", fizzbuzz::<Output>(i, &map, rule).iter().map(|o| o.to_string()).collect::<Vec<String>>().join(""));
     }
 }
