@@ -1,4 +1,4 @@
-use crate::FizzBuzzed;
+use super::FizzBuzzed;
 
 pub trait FizzBuzzable<O: FizzBuzzed<Self>>: Clone + PartialEq + PartialOrd {
     fn succ(&self) -> Self;

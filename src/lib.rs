@@ -1,17 +1,13 @@
 mod iter;
-mod fizzbuzzable;
+mod traits;
 
-use std::fmt;
+pub use traits::{FizzBuzzable, FizzBuzzed};
+
+use crate::iter::FizzBuzzIter;
 use std::collections::BTreeMap;
 use std::iter::Map;
-use crate::iter::FizzBuzzIter;
-use crate::fizzbuzzable::FizzBuzzable;
 
-pub trait FizzBuzzed<I: FizzBuzzable<Self>>: fmt::Display + Sized + Clone {
-    fn from(n: I, map: &BTreeMap<I, Self>, rule: &impl Fn(I, I) -> bool) -> Vec<Self>;
-}
-
-pub struct FizzBuzz<I, O, R: Fn(I, I) -> bool> 
+pub struct FizzBuzz<I, O, R: Fn(I, I) -> bool>
 where
     I: FizzBuzzable<O>,
     O: FizzBuzzed<I>,
@@ -37,6 +33,11 @@ impl<I: FizzBuzzable<O>, O: FizzBuzzed<I>, R: Fn(I, I) -> bool> FizzBuzz<I, O, R
     }
 
     pub fn iter_str(&self) -> Map<FizzBuzzIter<'_, I, O, R>, impl FnMut(Vec<O>) -> String> {
-        self.iter().map(|vo| vo.iter().map(|o| o.to_string()).collect::<Vec<String>>().join(""))
+        self.iter().map(|vo| {
+            vo.iter()
+                .map(|o| o.to_string())
+                .collect::<Vec<String>>()
+                .join("")
+        })
     }
 }

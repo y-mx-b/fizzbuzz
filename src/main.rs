@@ -1,6 +1,6 @@
 use fizzbuzz::{FizzBuzz, FizzBuzzed};
-use std::fmt;
 use std::collections::BTreeMap;
+use std::fmt;
 
 #[derive(Debug, Clone)]
 enum Output {
@@ -11,11 +11,15 @@ enum Output {
 
 impl fmt::Display for Output {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", match self {
-            Output::Fizz => String::from("fizz"),
-            Output::Buzz => String::from("buzz"),
-            Output::Num(n) => format!("{}", n),
-        })
+        write!(
+            f,
+            "{}",
+            match self {
+                Output::Fizz => String::from("fizz"),
+                Output::Buzz => String::from("buzz"),
+                Output::Num(n) => format!("{}", n),
+            }
+        )
     }
 }
 
@@ -38,7 +42,7 @@ impl FizzBuzzed<i64> for Output {
 }
 
 fn main() {
-    let rule = |n : i64, divis: i64| n % divis == 0;
+    let rule = |n: i64, divis: i64| n % divis == 0;
     let map = BTreeMap::from([(3, Output::Fizz), (5, Output::Buzz)]);
 
     let fb = FizzBuzz {

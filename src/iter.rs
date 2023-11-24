@@ -9,7 +9,9 @@ pub struct FizzBuzzIter<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>, R: Fn(I, I) ->
     pub(crate) rule: &'a R,
 }
 
-impl<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>, R: Fn(I, I) -> bool> Iterator for FizzBuzzIter<'a, I, O, R> {
+impl<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>, R: Fn(I, I) -> bool> Iterator
+    for FizzBuzzIter<'a, I, O, R>
+{
     type Item = Vec<O>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -24,7 +26,9 @@ impl<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>, R: Fn(I, I) -> bool> Iterator for
     }
 }
 
-impl<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>, R: Fn(I, I) -> bool> iter::DoubleEndedIterator for FizzBuzzIter<'a, I, O, R> {
+impl<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>, R: Fn(I, I) -> bool> iter::DoubleEndedIterator
+    for FizzBuzzIter<'a, I, O, R>
+{
     fn next_back(&mut self) -> Option<Self::Item> {
         if self.start > self.end {
             return None;
