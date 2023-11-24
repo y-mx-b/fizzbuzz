@@ -1,6 +1,6 @@
 use std::fmt;
 use std::collections::BTreeMap;
-use std::iter::Map;
+use std::iter;
 
 pub trait FizzBuzzed: fmt::Display + Sized + Clone {
     fn from(n: i64, map: &BTreeMap<i64, Self>, rule: &impl Fn(i64, i64) -> bool) -> Vec<Self>;
@@ -20,20 +20,20 @@ impl<O: FizzBuzzed, R: Fn(i64, i64) -> bool> FizzBuzz<O, R> {
 
     pub fn iter(&self) -> FizzBuzzIter<'_, O, R> {
         FizzBuzzIter {
-            current: self.start - 1,
+            start: self.start,
             end: self.end,
             map: &self.map,
             rule: &self.rule,
         }
     }
 
-    pub fn iter_str(&self) -> Map<FizzBuzzIter<'_, O, R>, impl FnMut(Vec<O>) -> String> {
+    pub fn iter_str(&self) -> iter::Map<FizzBuzzIter<'_, O, R>, impl FnMut(Vec<O>) -> String> {
         self.iter().map(|vo| vo.iter().map(|o| o.to_string()).collect::<Vec<String>>().join(""))
     }
 }
 
 pub struct FizzBuzzIter<'a, O: FizzBuzzed, R: Fn(i64, i64) -> bool> {
-    current: i64,
+    start: i64,
     end: i64,
     map: &'a BTreeMap<i64, O>,
     rule: &'a R,
@@ -43,11 +43,26 @@ impl<'a, O: FizzBuzzed, R: Fn(i64, i64) -> bool> Iterator for FizzBuzzIter<'a, O
     type Item = Vec<O>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.current += 1;
-        if self.current > self.end {
+        if self.start > self.end {
             return None;
         }
 
-        Some(O::from(self.current, &self.map, &self.rule))
+        let output = Some(O::from(self.start, &self.map, &self.rule));
+        self.start += 1;
+
+        output
+    }
+}
+
+impl<'a, O: FizzBuzzed, R: Fn(i64, i64) -> bool> iter::DoubleEndedIterator for FizzBuzzIter<'a, O, R> {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        if self.start > self.end {
+            return None;
+        }
+
+        let output = Some(O::from(self.end, &self.map, &self.rule));
+        self.end -= 1;
+
+        output
     }
 }
