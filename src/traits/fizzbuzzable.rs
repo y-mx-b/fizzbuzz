@@ -55,6 +55,16 @@ impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for i128 {
     }
 }
 
+impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for isize {
+    fn succ(&self) -> Self {
+        self + 1
+    }
+
+    fn pred(&self) -> Self {
+        self - 1
+    }
+}
+
 impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for u8 {
     fn succ(&self) -> Self {
         self + 1
@@ -96,6 +106,16 @@ impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for u64 {
 }
 
 impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for u128 {
+    fn succ(&self) -> Self {
+        self + 1
+    }
+
+    fn pred(&self) -> Self {
+        self - 1
+    }
+}
+
+impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for usize {
     fn succ(&self) -> Self {
         self + 1
     }
