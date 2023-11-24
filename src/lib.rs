@@ -1,5 +1,6 @@
 use std::fmt;
 use std::collections::BTreeMap;
+use std::iter::Map;
 
 pub trait FizzBuzzed: fmt::Display + Sized + Clone {
     fn from(n: i64, map: &BTreeMap<i64, Self>, rule: &impl Fn(i64, i64) -> bool) -> Vec<Self>;
@@ -24,6 +25,10 @@ impl<O: FizzBuzzed, R: Fn(i64, i64) -> bool> FizzBuzz<O, R> {
             map: &self.map,
             rule: &self.rule,
         }
+    }
+
+    pub fn iter_str(&self) -> Map<FizzBuzzIter<'_, O, R>, impl FnMut(Vec<O>) -> String> {
+        self.iter().map(|vo| vo.iter().map(|o| o.to_string()).collect::<Vec<String>>().join(""))
     }
 }
 

@@ -48,7 +48,7 @@ fn main() {
         rule: rule,
     };
 
-    for v in fb.iter() {
-       println!("{}", v.iter().map(|o| o.to_string()).collect::<Vec<String>>().join(""));
+    for s in fb.iter_str() {
+        println!("{}", s);
     }
 }
