@@ -1,4 +1,4 @@
-use fizzbuzz::{fizzbuzz, FizzBuzzed};
+use fizzbuzz::{FizzBuzz, FizzBuzzed};
 use std::fmt;
 use std::collections::BTreeMap;
 
@@ -20,7 +20,7 @@ impl fmt::Display for Output {
 }
 
 impl FizzBuzzed for Output {
-    fn from(n: i64, map: &BTreeMap<i64, Self>, rule: impl Fn(i64, i64) -> bool) -> Vec<Self> {
+    fn from(n: i64, map: &BTreeMap<i64, Self>, rule: &impl Fn(i64, i64) -> bool) -> Vec<Self> {
         let mut output = Vec::new();
 
         for &divis in map.keys() {
@@ -41,7 +41,14 @@ fn main() {
     let rule = |n : i64, divis: i64| n % divis == 0;
     let map = BTreeMap::from([(3, Output::Fizz), (5, Output::Buzz)]);
 
+    let fb = FizzBuzz {
+        start: 1,
+        end: 100,
+        map: map,
+        rule: rule,
+    };
+
     for i in 1..=100 {
-       println!("{}", fizzbuzz::<Output>(i, &map, rule).iter().map(|o| o.to_string()).collect::<Vec<String>>().join(""));
+       println!("{}", fb.result(i).iter().map(|o| o.to_string()).collect::<Vec<String>>().join(""));
     }
 }
