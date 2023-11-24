@@ -2,15 +2,15 @@ use crate::{FizzBuzzable, FizzBuzzed};
 use std::collections::BTreeMap;
 use std::iter;
 
-pub struct FizzBuzzIter<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>, R: Fn(I, I) -> bool> {
+pub struct FizzBuzzIter<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>> {
     pub(crate) start: I,
     pub(crate) end: I,
     pub(crate) map: &'a BTreeMap<I, O>,
-    pub(crate) rule: &'a R,
+    pub(crate) rule: &'a dyn Fn(I, I) -> bool,
 }
 
-impl<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>, R: Fn(I, I) -> bool> Iterator
-    for FizzBuzzIter<'a, I, O, R>
+impl<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>> Iterator
+    for FizzBuzzIter<'a, I, O>
 {
     type Item = Vec<O>;
 
@@ -26,8 +26,8 @@ impl<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>, R: Fn(I, I) -> bool> Iterator
     }
 }
 
-impl<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>, R: Fn(I, I) -> bool> iter::DoubleEndedIterator
-    for FizzBuzzIter<'a, I, O, R>
+impl<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>> iter::DoubleEndedIterator
+    for FizzBuzzIter<'a, I, O>
 {
     fn next_back(&mut self) -> Option<Self::Item> {
         if self.start > self.end {

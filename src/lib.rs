@@ -1,13 +1,16 @@
-mod iter;
-mod traits;
+pub mod iter;
+pub mod traits;
+pub mod builder;
+pub mod default;
 
 pub use traits::{FizzBuzzable, FizzBuzzed};
+pub use builder::FizzBuzzBuilder;
 
 use crate::iter::FizzBuzzIter;
 use std::collections::BTreeMap;
 use std::iter::Map;
 
-pub struct FizzBuzz<I, O, R: Fn(I, I) -> bool>
+pub struct FizzBuzz<I, O>
 where
     I: FizzBuzzable<O>,
     O: FizzBuzzed<I>,
@@ -15,15 +18,15 @@ where
     pub start: I,
     pub end: I,
     pub map: BTreeMap<I, O>,
-    pub rule: R,
+    pub rule: Box<dyn Fn(I, I) -> bool>,
 }
 
-impl<I: FizzBuzzable<O>, O: FizzBuzzed<I>, R: Fn(I, I) -> bool> FizzBuzz<I, O, R> {
+impl<I: FizzBuzzable<O>, O: FizzBuzzed<I>> FizzBuzz<I, O> {
     pub fn result(&self, n: I) -> Vec<O> {
         O::from(n, &self.map, &self.rule)
     }
 
-    pub fn iter(&self) -> FizzBuzzIter<'_, I, O, R> {
+    pub fn iter(&self) -> FizzBuzzIter<'_, I, O> {
         FizzBuzzIter {
             start: self.start.clone(),
             end: self.end.clone(),
@@ -32,7 +35,7 @@ impl<I: FizzBuzzable<O>, O: FizzBuzzed<I>, R: Fn(I, I) -> bool> FizzBuzz<I, O, R
         }
     }
 
-    pub fn iter_str(&self) -> Map<FizzBuzzIter<'_, I, O, R>, impl FnMut(Vec<O>) -> String> {
+    pub fn iter_str(&self) -> Map<FizzBuzzIter<'_, I, O>, impl FnMut(Vec<O>) -> String> {
         self.iter().map(|vo| {
             vo.iter()
                 .map(|o| o.to_string())
