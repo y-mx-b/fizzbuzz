@@ -1,17 +1,11 @@
 mod iter;
+mod fizzbuzzable;
 
 use std::fmt;
 use std::collections::BTreeMap;
 use std::iter::Map;
 use crate::iter::FizzBuzzIter;
-use std::ops;
-
-pub trait FizzBuzzable<O: FizzBuzzed<Self>>: Clone + PartialEq + PartialOrd {
-    fn succ(&self) -> Self;
-    fn pred(&self) -> Self;
-}
-
-// TODO: provide impl for all number types
+use crate::fizzbuzzable::FizzBuzzable;
 
 pub trait FizzBuzzed<I: FizzBuzzable<Self>>: fmt::Display + Sized + Clone {
     fn from(n: I, map: &BTreeMap<I, Self>, rule: &impl Fn(I, I) -> bool) -> Vec<Self>;

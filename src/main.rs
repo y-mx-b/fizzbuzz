@@ -19,7 +19,7 @@ impl fmt::Display for Output {
     }
 }
 
-impl FizzBuzzed for Output {
+impl FizzBuzzed<i64> for Output {
     fn from(n: i64, map: &BTreeMap<i64, Self>, rule: &impl Fn(i64, i64) -> bool) -> Vec<Self> {
         let mut output = Vec::new();
 
