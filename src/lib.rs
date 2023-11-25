@@ -18,10 +18,10 @@ where
     I: FizzBuzzable<O>,
     O: FizzBuzzed<I>,
 {
-    pub start: I,
-    pub end: I,
-    pub map: BTreeMap<I, O>,
-    pub rule: Box<dyn Fn(I, I) -> bool>,
+    start: I,
+    end: I,
+    map: BTreeMap<I, O>,
+    rule: Box<dyn Fn(I, I) -> bool>,
 }
 
 impl<I: FizzBuzzable<O>, O: FizzBuzzed<I>> FizzBuzz<I, O> {
