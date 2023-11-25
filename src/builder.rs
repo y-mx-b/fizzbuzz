@@ -36,8 +36,12 @@ impl<I: FizzBuzzable<O>, O: FizzBuzzed<I>> FizzBuzzBuilder<I, O> {
 
     pub fn add_match(mut self, input: I, output: O) -> Self {
         match &mut self.map {
-            Some(m) => { m.insert(input, output); }
-            None => { self.map = Some(BTreeMap::from([(input, output)])); }
+            Some(m) => {
+                m.insert(input, output);
+            }
+            None => {
+                self.map = Some(BTreeMap::from([(input, output)]));
+            }
         }
 
         self

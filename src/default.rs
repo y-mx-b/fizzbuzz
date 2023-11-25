@@ -27,7 +27,11 @@ macro_rules! impl_default_output {
         }
 
         impl FizzBuzzed<$type> for $name {
-            fn from(n: $type, map: &BTreeMap<$type, Self>, rule: &impl Fn($type, $type) -> bool) -> Vec<Self> {
+            fn from(
+                n: $type,
+                map: &BTreeMap<$type, Self>,
+                rule: &impl Fn($type, $type) -> bool,
+            ) -> Vec<Self> {
                 let mut output = Vec::new();
 
                 for &divis in map.keys() {
@@ -60,7 +64,7 @@ macro_rules! impl_default_output {
                 }
             }
         }
-    }
+    };
 }
 
 impl_default_output!(i8, Fromi8);

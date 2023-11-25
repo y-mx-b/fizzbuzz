@@ -16,7 +16,7 @@ macro_rules! impl_fizzbuzzable {
                 self - 1
             }
         }
-    }
+    };
 }
 
 impl_fizzbuzzable!(i8);
