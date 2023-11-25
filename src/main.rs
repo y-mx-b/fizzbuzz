@@ -1,8 +1,8 @@
 use fizzbuzz::traits::*;
-use fizzbuzz::FizzBuzzBuilder;
+use fizzbuzz::{FizzBuzzBuilder, FizzBuzz};
 
 fn main() {
-    let fb = FizzBuzzBuilder::new().build();
+    let fb: FizzBuzz<i32, _> = FizzBuzzBuilder::new().build();
 
     for s in fb.iter_str() {
         println!("{}", s);
