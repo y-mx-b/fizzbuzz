@@ -1,5 +1,8 @@
 pub mod builder;
-pub mod default;
+#[cfg(feature = "default_input")]
+mod default_input;
+#[cfg(feature = "default_output")]
+mod default_output;
 pub mod iter;
 pub mod traits;
 

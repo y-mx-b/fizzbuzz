@@ -67,13 +67,23 @@ macro_rules! impl_default_output {
     };
 }
 
+#[cfg(feature = "default_output_i8")]
 impl_default_output!(i8, Fromi8);
+#[cfg(feature = "default_output_i16")]
 impl_default_output!(i16, Fromi16);
+#[cfg(feature = "default_output_i32")]
 impl_default_output!(i32, Fromi32);
+#[cfg(feature = "default_output_i64")]
 impl_default_output!(i64, Fromi64);
+#[cfg(feature = "default_output_i128")]
 impl_default_output!(i128, Fromi128);
+#[cfg(feature = "default_output_u8")]
 impl_default_output!(u8, Fromu8);
+#[cfg(feature = "default_output_u16")]
 impl_default_output!(u16, Fromu16);
+#[cfg(feature = "default_output_u32")]
 impl_default_output!(u32, Fromu32);
+#[cfg(feature = "default_output_u64")]
 impl_default_output!(u64, Fromu64);
+#[cfg(feature = "default_output_u128")]
 impl_default_output!(u128, Fromu128);
