@@ -1,18 +1,35 @@
 pub mod builder;
 #[cfg(feature = "default_input")]
-mod default_input;
+pub mod default_input;
 #[cfg(feature = "default_output")]
-mod default_output;
+pub mod default_output;
 pub mod iter;
 pub mod traits;
 
 pub use builder::FizzBuzzBuilder;
-pub use traits::{FizzBuzzable, FizzBuzzed};
+pub use traits::*;
 
 use crate::iter::FizzBuzzIter;
 use std::collections::BTreeMap;
 use std::iter::Map;
 
+/// An iterable type that applies a rule to a range of inputs and returns a
+/// vector of the resulting outputs that match which rule applications matched
+/// the input.
+///
+/// The default implementations for Rust's primitive integer types are available
+/// by default. Matching default output types are provided as well.
+///
+/// # Example
+///
+/// ```rust
+/// # use fizzbuzz::traits::*;
+/// # use fizzbuzz::{FizzBuzzBuilder, FizzBuzz};
+/// let fb: FizzBuzz<i32, _> = FizzBuzzBuilder::new().build();
+/// for v in fb.iter() {
+///     println!("{:?}", v);
+/// }
+/// ```
 pub struct FizzBuzz<I, O>
 where
     I: FizzBuzzable<O>,
