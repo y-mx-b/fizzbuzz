@@ -41,10 +41,10 @@ impl<I: FizzBuzzable<O>, O: FizzBuzzed<I>> FizzBuzzBuilder<I, O> {
     }
 
     pub fn range<R: RangeBounds<I>>(mut self, range: R) -> Result<Self, FizzBuzzBuilderError> {
-        let validate = |b: Bound<&I>, d| {
+        let validate = |b: Bound<&I>, d, is_start: bool| {
             match b {
                 Bound::Included(n) => Ok(Some(n.clone())),
-                Bound::Excluded(n) => Ok(Some(n.succ())),
+                Bound::Excluded(n) => Ok(Some(if is_start { n.succ() } else { n.pred() })),
                 Bound::Unbounded => { 
                     match d {
                         Some(n) => Ok(Some(n)),
@@ -54,8 +54,8 @@ impl<I: FizzBuzzable<O>, O: FizzBuzzed<I>> FizzBuzzBuilder<I, O> {
             }
         };
 
-        self.start = validate(range.start_bound(), <I as FizzBuzzable<O>>::min())?;
-        self.start = validate(range.end_bound(), <I as FizzBuzzable<O>>::min())?;
+        self.start = validate(range.start_bound(), <I as FizzBuzzable<O>>::min(), true)?;
+        self.end = validate(range.end_bound(), <I as FizzBuzzable<O>>::max(), false)?;
 
         Ok(self)
     }

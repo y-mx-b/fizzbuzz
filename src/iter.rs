@@ -13,12 +13,13 @@ impl<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>> Iterator for FizzBuzzIter<'a, I, 
     type Item = Vec<O>;
 
     fn next(&mut self) -> Option<Self::Item> {
+        // TODO: handle overflow somehow
         if self.current > self.end {
             return None;
         }
 
         let output = Some(O::from(self.current.clone(), &self.map, &self.rule));
-        self.current = self.current.succ();
+        self.current = self.current.succ(); 
 
         output
     }
