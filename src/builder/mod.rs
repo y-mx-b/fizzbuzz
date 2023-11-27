@@ -1,8 +1,11 @@
 mod error;
 
-use crate::traits::*;
 pub use error::FizzBuzzBuilderError;
+
+use crate::traits::*;
 use std::collections::BTreeMap;
+use std::ops::{RangeBounds, Bound};
+
 /// A builder for the [FizzBuzz](crate::FizzBuzz) struct.
 pub struct FizzBuzzBuilder<I: FizzBuzzable<O>, O: FizzBuzzed<I>> {
     pub(crate) start: Option<I>,
@@ -37,12 +40,25 @@ impl<I: FizzBuzzable<O>, O: FizzBuzzed<I>> FizzBuzzBuilder<I, O> {
         self
     }
 
-    // TODO: convert FizzBuzz to use std::ops::Bound instead
-    // pub fn range<R: RangeBounds<I>>(mut self, range: R) -> Result<Self, FizzBuzzBuilderError> {
-    //     self.start = range.start_bound();
-    //     self.end = range.end_bound();
-    //     self
-    // }
+    pub fn range<R: RangeBounds<I>>(mut self, range: R) -> Result<Self, FizzBuzzBuilderError> {
+        let validate = |b: Bound<&I>, d| {
+            match b {
+                Bound::Included(n) => Ok(Some(n.clone())),
+                Bound::Excluded(n) => Ok(Some(n.succ())),
+                Bound::Unbounded => { 
+                    match d {
+                        Some(n) => Ok(Some(n)),
+                        None => Err(FizzBuzzBuilderError::InvalidUnboundedStart)
+                    }
+                }
+            }
+        };
+
+        self.start = validate(range.start_bound(), <I as FizzBuzzable<O>>::min())?;
+        self.start = validate(range.end_bound(), <I as FizzBuzzable<O>>::min())?;
+
+        Ok(self)
+    }
 
     pub fn add_mapping(mut self, input: I, output: O) -> Self {
         match &mut self.map {

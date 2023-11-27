@@ -48,7 +48,7 @@ impl<I: FizzBuzzable<O>, O: FizzBuzzed<I>> FizzBuzz<I, O> {
 
     pub fn iter(&self) -> FizzBuzzIter<'_, I, O> {
         FizzBuzzIter {
-            start: self.start.clone(),
+            current: self.start.clone(),
             end: self.end.clone(),
             map: &self.map,
             rule: &self.rule,

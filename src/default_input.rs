@@ -3,6 +3,14 @@ use crate::traits::*;
 macro_rules! impl_fizzbuzzable {
     ($type:ty) => {
         impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for $type {
+            fn min() -> Option<Self> {
+                Some(0)
+            }
+
+            fn max() -> Option<Self> {
+                Some(<$type>::MAX)
+            }
+
             fn succ(&self) -> Self {
                 self + 1
             }
@@ -34,3 +42,5 @@ impl_fizzbuzzable!(u32);
 impl_fizzbuzzable!(u64);
 #[cfg(feature = "default_input_u128")]
 impl_fizzbuzzable!(u128);
+
+// TODO: Add f32 and f64 impls
