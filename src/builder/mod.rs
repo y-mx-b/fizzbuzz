@@ -30,16 +30,6 @@ impl<I: FizzBuzzable<O>, O: FizzBuzzed<I>> FizzBuzzBuilder<I, O> {
         Self::default()
     }
 
-    pub fn start_at(mut self, start: I) -> Self {
-        self.start = Some(start);
-        self
-    }
-
-    pub fn end_at(mut self, end: I) -> Self {
-        self.end = Some(end);
-        self
-    }
-
     pub fn range<R: RangeBounds<I>>(mut self, range: R) -> Result<Self, FizzBuzzBuilderError> {
         let validate = |b: Bound<&I>, d, is_start: bool| {
             match b {
