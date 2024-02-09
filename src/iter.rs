@@ -19,7 +19,7 @@ impl<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>> Iterator for FizzBuzzIter<'a, I, 
         }
 
         let output = Some(O::from(self.current.clone(), &self.map, &self.rule));
-        self.current = self.current.succ(); 
+        self.current = self.current.succ();
 
         output
     }

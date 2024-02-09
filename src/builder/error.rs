@@ -22,7 +22,7 @@ impl fmt::Display for FizzBuzzBuilderError {
                 Self::MissingRuleAndMap => "Please provide an appropriate rule and map.",
                 Self::InvalidUnboundedStart => "Unbounded start is invalid.",
                 Self::InvalidUnboundedEnd => "Unbounded end is invalid.",
-                Self::InvalidUnboundedBounds =>  "Unbounded bounds are invalid.",
+                Self::InvalidUnboundedBounds => "Unbounded bounds are invalid.",
             }
         )
     }
