@@ -18,7 +18,7 @@ impl<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>> Iterator for FizzBuzzIter<'a, I, 
             return None;
         }
 
-        let output = Some(O::from(self.current.clone(), &self.map, &self.rule));
+        let output = Some(O::from(self.current.clone(), self.map, &self.rule));
         self.current = self.current.succ();
 
         output
@@ -33,7 +33,7 @@ impl<'a, I: FizzBuzzable<O>, O: FizzBuzzed<I>> iter::DoubleEndedIterator
             return None;
         }
 
-        let output = Some(O::from(self.end.clone(), &self.map, &self.rule));
+        let output = Some(O::from(self.end.clone(), self.map, &self.rule));
         self.end = self.end.pred();
 
         output
