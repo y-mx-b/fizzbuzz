@@ -1,3 +1,4 @@
+use crate::builder::BuilderState;
 use crate::traits::*;
 use crate::{FizzBuzz, FizzBuzzBuilder, FizzBuzzed};
 use std::collections::BTreeMap;
@@ -54,7 +55,10 @@ macro_rules! impl_default_output {
             }
         }
 
-        impl DefaultBuilder<$type, $name> for FizzBuzzBuilder<$type, $name> {
+        impl<const MAP: bool, const RULE: bool, const START: bool, const END: bool>
+            DefaultBuilder<$type, $name>
+            for FizzBuzzBuilder<$type, $name, BuilderState<MAP, RULE, START, END>>
+        {
             fn default_map() -> BTreeMap<$type, $name> {
                 BTreeMap::from([(3, $name::Fizz), (5, $name::Buzz)])
             }
