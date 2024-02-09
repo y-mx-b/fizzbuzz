@@ -1,10 +1,9 @@
 pub mod builder;
-#[cfg(feature = "default_input")]
-pub mod default_input;
-#[cfg(feature = "default_output")]
-pub mod default_output;
 pub mod iter;
 pub mod traits;
+#[cfg(any(feature = "signed_output", feature = "unsigned_output"))]
+pub mod default_output;
+mod default_input;
 
 pub use builder::{FizzBuzzBuilder, FizzBuzzBuilderError};
 pub use traits::*;

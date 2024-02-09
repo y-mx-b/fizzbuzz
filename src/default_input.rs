@@ -22,25 +22,23 @@ macro_rules! impl_fizzbuzzable {
     };
 }
 
-#[cfg(feature = "default_input_i8")]
+#[cfg(feature = "signed_input")]
 impl_fizzbuzzable!(i8);
-#[cfg(feature = "default_input_i16")]
+#[cfg(feature = "signed_input")]
 impl_fizzbuzzable!(i16);
-#[cfg(feature = "default_input_i32")]
+#[cfg(feature = "signed_input")]
 impl_fizzbuzzable!(i32);
-#[cfg(feature = "default_input_i64")]
+#[cfg(feature = "signed_input")]
 impl_fizzbuzzable!(i64);
-#[cfg(feature = "default_input_i128")]
+#[cfg(feature = "signed_input")]
 impl_fizzbuzzable!(i128);
-#[cfg(feature = "default_input_u8")]
+#[cfg(feature = "unsigned_input")]
 impl_fizzbuzzable!(u8);
-#[cfg(feature = "default_input_u16")]
+#[cfg(feature = "unsigned_input")]
 impl_fizzbuzzable!(u16);
-#[cfg(feature = "default_input_u32")]
+#[cfg(feature = "unsigned_input")]
 impl_fizzbuzzable!(u32);
-#[cfg(feature = "default_input_u64")]
+#[cfg(feature = "unsigned_input")]
 impl_fizzbuzzable!(u64);
-#[cfg(feature = "default_input_u128")]
+#[cfg(feature = "unsigned_input")]
 impl_fizzbuzzable!(u128);
-
-// TODO: Add f32 and f64 impls

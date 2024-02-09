@@ -6,36 +6,10 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [features]
-default = ["default_input", "default_output"]
-default_input = ["default_input_i8", "default_input_i16", "default_input_i32", 
-                 "default_input_i64", "default_input_i128", "default_input_u8", 
-                 "default_input_u16", "default_input_u32", "default_input_u64", 
-                 "default_input_u128"]
-default_output = ["default_output_i8", "default_output_i16", "default_output_i32", 
-                 "default_output_i64", "default_output_i128", "default_output_u8", 
-                 "default_output_u16", "default_output_u32", "default_output_u64", 
-                 "default_output_u128"]
-
-default_input_i8 = []
-default_input_i16 = []
-default_input_i32 = []
-default_input_i64 = []
-default_input_i128 = []
-default_input_u8 = []
-default_input_u16 = []
-default_input_u32 = []
-default_input_u64 = []
-default_input_u128 = []
-
-default_output_i8 = []
-default_output_i16 = []
-default_output_i32 = []
-default_output_i64 = []
-default_output_i128 = []
-default_output_u8 = []
-default_output_u16 = []
-default_output_u32 = []
-default_output_u64 = []
-default_output_u128 = []
+default = ["signed_input", "signed_output", "unsigned_input", "unsigned_output"]
+signed_input = []
+signed_output = []
+unsigned_input = []
+unsigned_output = []
 
 [dependencies]

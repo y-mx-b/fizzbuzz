@@ -8,7 +8,7 @@ use std::collections::BTreeMap;
 use std::marker::PhantomData;
 use std::ops::{Bound, RangeBounds};
 
-/// A builder for the [FizzBuzz](crate::FizzBuzz) struct.
+/// A builder for the [FizzBuzz] struct.
 pub struct FizzBuzzBuilder<I: FizzBuzzable<O>, O: FizzBuzzed<I>, BuilderState> {
     pub(crate) _state: PhantomData<BuilderState>,
     pub(crate) start: Option<I>,
