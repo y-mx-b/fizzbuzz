@@ -1,5 +1,4 @@
-use fizzbuzz::traits::*;
-use fizzbuzz::{builder::FizzBuzzBuilderError, FizzBuzz, FizzBuzzBuilder};
+use fizzbuzz::*;
 
 fn main() -> Result<(), FizzBuzzBuilderError> {
     let fb: FizzBuzz<i8, _> = FizzBuzzBuilder::default().range(..=10)?.build();

@@ -6,7 +6,7 @@ pub mod default_output;
 pub mod iter;
 pub mod traits;
 
-pub use builder::FizzBuzzBuilder;
+pub use builder::{FizzBuzzBuilder, FizzBuzzBuilderError};
 pub use traits::*;
 
 use crate::iter::FizzBuzzIter;
@@ -23,8 +23,7 @@ use std::iter::Map;
 /// # Example
 ///
 /// ```rust
-/// # use fizzbuzz::traits::*;
-/// # use fizzbuzz::{FizzBuzzBuilder, FizzBuzz};
+/// # use fizzbuzz::*;
 /// let fb: FizzBuzz<u32, _> = FizzBuzzBuilder::default().build();
 /// for v in fb.iter() {
 ///     println!("{:?}", v);
@@ -46,8 +45,7 @@ impl<I: FizzBuzzable<O>, O: FizzBuzzed<I>> FizzBuzz<I, O> {
     ///
     /// # Example
     /// ```rust
-    /// # use fizzbuzz::traits::*;
-    /// # use fizzbuzz::{FizzBuzzBuilder, FizzBuzz};
+    /// # use fizzbuzz::*;
     /// let fb: FizzBuzz<u32, _> = FizzBuzzBuilder::default().build();
     /// let result = fb.result(10).join("");
     /// assert_eq!(result, "buzz");
