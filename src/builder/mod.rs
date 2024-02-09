@@ -44,7 +44,7 @@ impl<
         const END: bool,
     > FizzBuzzBuilder<I, O, BuilderState<MAP, RULE, START, END>>
 {
-    pub fn set_state<const M: bool, const R: bool, const S: bool, const E: bool>(
+    fn set_state<const M: bool, const R: bool, const S: bool, const E: bool>(
         self,
     ) -> FizzBuzzBuilder<I, O, BuilderState<M, R, S, E>> {
         FizzBuzzBuilder::<I, O, BuilderState<M, R, S, E>> {
@@ -66,14 +66,37 @@ impl<
             Bound::Excluded(n) => Ok(Some(if is_start { n.succ() } else { n.pred() })),
             Bound::Unbounded => match d {
                 Some(n) => Ok(Some(n)),
-                None => Err(FizzBuzzBuilderError::InvalidUnboundedStart),
+                None => if is_start {
+                    Err(FizzBuzzBuilderError::InvalidUnboundedStart)
+                } else {
+                    Err(FizzBuzzBuilderError::InvalidUnboundedEnd)
+                }
             },
         };
 
-        self.start = validate(range.start_bound(), <I as FizzBuzzable<O>>::min(), true)?;
-        self.end = validate(range.end_bound(), <I as FizzBuzzable<O>>::max(), false)?;
+        let start = validate(range.start_bound(), <I as FizzBuzzable<O>>::min(), true);
+        let end = validate(range.end_bound(), <I as FizzBuzzable<O>>::max(), false);
 
-        Ok(Self::set_state::<MAP, RULE, true, true>(self))
+        match (start, end) {
+            (Ok(s), Ok(e)) => {
+                self.start = s;
+                self.end = e;
+
+                Ok(Self::set_state::<MAP, RULE, true, true>(self))
+            }
+            (Ok(s), Err(err)) => {
+                self.start = s;
+                Err(err)
+            }
+            (Err(err), Ok(e))=> {
+                self.end = e;
+                Err(err)
+            }
+            (Err(e1), Err(e2)) => {
+                Err(FizzBuzzBuilderError::InvalidUnboundedBounds)
+            }
+        }
+
     }
 
     pub fn add_mapping(

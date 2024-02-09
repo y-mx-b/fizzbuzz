@@ -4,7 +4,7 @@ macro_rules! impl_fizzbuzzable {
     ($type:ty) => {
         impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for $type {
             fn min() -> Option<Self> {
-                Some(0)
+                Some(<$type>::MIN)
             }
 
             fn max() -> Option<Self> {
