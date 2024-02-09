@@ -66,10 +66,12 @@ impl<
             Bound::Excluded(n) => Ok(Some(if is_start { n.succ() } else { n.pred() })),
             Bound::Unbounded => match d {
                 Some(n) => Ok(Some(n)),
-                None => if is_start {
-                    Err(FizzBuzzBuilderError::InvalidUnboundedStart)
-                } else {
-                    Err(FizzBuzzBuilderError::InvalidUnboundedEnd)
+                None => {
+                    if is_start {
+                        Err(FizzBuzzBuilderError::InvalidUnboundedStart)
+                    } else {
+                        Err(FizzBuzzBuilderError::InvalidUnboundedEnd)
+                    }
                 }
             },
         };
@@ -88,15 +90,12 @@ impl<
                 self.start = s;
                 Err(err)
             }
-            (Err(err), Ok(e))=> {
+            (Err(err), Ok(e)) => {
                 self.end = e;
                 Err(err)
             }
-            (Err(e1), Err(e2)) => {
-                Err(FizzBuzzBuilderError::InvalidUnboundedBounds)
-            }
+            (Err(e1), Err(e2)) => Err(FizzBuzzBuilderError::InvalidUnboundedBounds),
         }
-
     }
 
     pub fn add_mapping(

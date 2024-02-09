@@ -42,6 +42,16 @@ where
 }
 
 impl<I: FizzBuzzable<O>, O: FizzBuzzed<I>> FizzBuzz<I, O> {
+    /// Evaluate the output of a given input.
+    ///
+    /// # Example
+    /// ```rust
+    /// # use fizzbuzz::traits::*;
+    /// # use fizzbuzz::{FizzBuzzBuilder, FizzBuzz};
+    /// let fb: FizzBuzz<u32, _> = FizzBuzzBuilder::default().build();
+    /// let result = fb.result(10).join("");
+    /// assert_eq!(result, "buzz");
+    /// ```
     pub fn result(&self, n: I) -> Vec<O> {
         O::from(n, &self.map, &self.rule)
     }
@@ -55,7 +65,10 @@ impl<I: FizzBuzzable<O>, O: FizzBuzzed<I>> FizzBuzz<I, O> {
         }
     }
 
-    pub fn iter_str(&self, sep: &'static str) -> Map<FizzBuzzIter<'_, I, O>, impl FnMut(Vec<O>) -> String> {
+    pub fn iter_str<'a>(
+        &self,
+        sep: &'a str,
+    ) -> Map<FizzBuzzIter<'_, I, O>, impl FnMut(Vec<O>) -> String + 'a> {
         self.iter().map(|vo| {
             vo.iter()
                 .map(|o| o.to_string())

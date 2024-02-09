@@ -4,4 +4,4 @@ mod fizzbuzzed;
 
 pub use builder::DefaultBuilder;
 pub use fizzbuzzable::FizzBuzzable;
-pub use fizzbuzzed::FizzBuzzed;
+pub use fizzbuzzed::{FizzBuzzed, JoinFizzBuzzed};
