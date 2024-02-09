@@ -6,6 +6,7 @@ pub enum FizzBuzzBuilderError {
     InvalidUnboundedStart,
 }
 
+// TODO: write better error messages with more context
 impl fmt::Display for FizzBuzzBuilderError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(

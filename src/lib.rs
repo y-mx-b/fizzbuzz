@@ -25,7 +25,7 @@ use std::iter::Map;
 /// ```rust
 /// # use fizzbuzz::traits::*;
 /// # use fizzbuzz::{FizzBuzzBuilder, FizzBuzz};
-/// let fb: FizzBuzz<i32, _> = FizzBuzzBuilder::default().build();
+/// let fb: FizzBuzz<u32, _> = FizzBuzzBuilder::default().build();
 /// for v in fb.iter() {
 ///     println!("{:?}", v);
 /// }
@@ -55,12 +55,12 @@ impl<I: FizzBuzzable<O>, O: FizzBuzzed<I>> FizzBuzz<I, O> {
         }
     }
 
-    pub fn iter_str(&self) -> Map<FizzBuzzIter<'_, I, O>, impl FnMut(Vec<O>) -> String> {
+    pub fn iter_str(&self, sep: &'static str) -> Map<FizzBuzzIter<'_, I, O>, impl FnMut(Vec<O>) -> String> {
         self.iter().map(|vo| {
             vo.iter()
                 .map(|o| o.to_string())
                 .collect::<Vec<String>>()
-                .join("")
+                .join(sep)
         })
     }
 }
