@@ -25,7 +25,7 @@ use std::iter::Map;
 /// ```rust
 /// # use fizzbuzz::traits::*;
 /// # use fizzbuzz::{FizzBuzzBuilder, FizzBuzz};
-/// let fb: FizzBuzz<i32, _> = FizzBuzzBuilder::new().build();
+/// let fb: FizzBuzz<i32, _> = FizzBuzzBuilder::default().build();
 /// for v in fb.iter() {
 ///     println!("{:?}", v);
 /// }

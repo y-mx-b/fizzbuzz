@@ -1,8 +1,9 @@
 use crate::builder::BuilderState;
 use crate::traits::*;
-use crate::{FizzBuzz, FizzBuzzBuilder, FizzBuzzed};
+use crate::{FizzBuzzBuilder, FizzBuzzed};
 use std::collections::BTreeMap;
 use std::fmt;
+use std::marker::PhantomData;
 
 macro_rules! impl_default_output {
     ($type:ty, $name:ident) => {
@@ -55,9 +56,8 @@ macro_rules! impl_default_output {
             }
         }
 
-        impl<const MAP: bool, const RULE: bool, const START: bool, const END: bool>
-            DefaultBuilder<$type, $name>
-            for FizzBuzzBuilder<$type, $name, BuilderState<MAP, RULE, START, END>>
+        impl DefaultBuilder<$type, $name>
+            for FizzBuzzBuilder<$type, $name, BuilderState<false, false, false, false>>
         {
             fn default_map() -> BTreeMap<$type, $name> {
                 BTreeMap::from([(3, $name::Fizz), (5, $name::Buzz)])
@@ -65,12 +65,13 @@ macro_rules! impl_default_output {
             fn default_rule() -> Box<dyn Fn($type, $type) -> bool> {
                 Box::new(|n, divis| n % divis == 0)
             }
-            fn build(self) -> FizzBuzz<$type, $name> {
-                FizzBuzz {
-                    start: self.start.unwrap_or(1),
-                    end: self.end.unwrap_or(100),
-                    map: self.map.unwrap_or(Self::default_map()),
-                    rule: self.rule.unwrap_or(Self::default_rule()),
+            fn default() -> FizzBuzzBuilder<$type, $name, BuilderState<true, true, true, true>> {
+                FizzBuzzBuilder {
+                    _state: PhantomData,
+                    start: Some(1),
+                    end: Some(100),
+                    map: Some(Self::default_map()),
+                    rule: Some(Self::default_rule()),
                 }
             }
         }
