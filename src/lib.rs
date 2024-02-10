@@ -28,18 +28,17 @@ use std::iter::Map;
 ///     println!("{:?}", v);
 /// }
 /// ```
-pub struct FizzBuzz<I, O>
+pub struct FizzBuzz<T, I, O>
 where
-    I: FizzBuzzable<O>,
-    O: FizzBuzzed<I>,
+    I: FizzBuzzable<T, O>,
+    O: FizzBuzzed<T, I>,
 {
-    start: I,
-    end: I,
+    domain: I,
     map: BTreeMap<I, O>,
     rule: Box<dyn Fn(I, I) -> bool>,
 }
 
-impl<I: FizzBuzzable<O>, O: FizzBuzzed<I>> FizzBuzz<I, O> {
+impl<T, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>> FizzBuzz<T, I, O> {
     /// Evaluate the output of a given input.
     ///
     /// # Example
