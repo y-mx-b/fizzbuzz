@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use std::fmt::{Debug, Display};
 
 pub trait FizzBuzzed<T, I: FizzBuzzable<Self, T>>: Display + Debug + Sized + Clone {
-    fn from(n: I, map: &BTreeMap<I, Self>, rule: &impl Fn(I, I) -> bool) -> Vec<Self>;
+    fn from(n: I, map: &BTreeMap<I, Self>, rule: &impl Fn(I, I) -> bool) -> Vec<Self>; // TODO: rename this function
 }
 
 pub trait JoinFizzBuzzed<T, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>> {

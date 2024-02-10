@@ -1,5 +1,4 @@
 pub mod builder;
-pub mod iter;
 pub mod traits;
 #[cfg(any(feature = "signed_output", feature = "unsigned_output"))]
 pub mod default_output;
@@ -8,9 +7,7 @@ mod default_input;
 pub use builder::{FizzBuzzBuilder, FizzBuzzBuilderError};
 pub use traits::*;
 
-use crate::iter::FizzBuzzIter;
 use std::collections::BTreeMap;
-use std::iter::Map;
 
 /// An iterable type that applies a rule to a range of inputs and returns a
 /// vector of the resulting outputs that match which rule applications matched
@@ -51,25 +48,14 @@ impl<T, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>> FizzBuzz<T, I, O> {
     pub fn result(&self, n: I) -> Vec<O> {
         O::from(n, &self.map, &self.rule)
     }
+}
 
-    pub fn iter(&self) -> FizzBuzzIter<'_, I, O> {
-        FizzBuzzIter {
-            current: self.start.clone(),
-            end: self.end.clone(),
-            map: &self.map,
-            rule: &self.rule,
-        }
-    }
+impl<T, I: FizzBuzzable<I, O>, O: FizzBuzzed<T, I>> Iterator for FizzBuzz<I, I, O> {
+    type Item = Vec<O>;
 
-    pub fn iter_str<'a>(
-        &self,
-        sep: &'a str,
-    ) -> Map<FizzBuzzIter<'_, I, O>, impl FnMut(Vec<O>) -> String + 'a> {
-        self.iter().map(|vo| {
-            vo.iter()
-                .map(|o| o.to_string())
-                .collect::<Vec<String>>()
-                .join(sep)
-        })
+    fn next(&mut self) -> Option<Self::Item> {
+        self.domain.next().and_then(|i| Some(O::from(i, &self.map, &self.rule)))
     }
 }
+
+// TODO: impl doubleendediterator
