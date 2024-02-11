@@ -30,7 +30,7 @@ where
     RI: RangeItem<DI>,
 {
     domain: D,
-    rules: Vec<Box<dyn Fn(DI) -> Option<RI>>>,
+    rules: Vec<Box<dyn Fn(&DI) -> Option<RI>>>,
 }
 
 impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>> FizzBuzz<DI, D, RI> {
@@ -43,18 +43,18 @@ impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>> FizzBuzz<DI, D, RI> {
     /// let result = fb.result(10).join("");
     /// assert_eq!(result, "buzz");
     /// ```
-    pub fn result(&self, n: DI) -> Vec<RI> {
-        RI::from(n, &self.rules)
+    pub fn result(&self, n: DI) -> RangeVariant<DI, RI> {
+        RangeVariant::from(n, &self.rules)
     }
 }
 
 impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>> Iterator for FizzBuzz<DI, D, RI> {
-    type Item = Vec<RI>;
+    type Item = RangeVariant<DI, RI>;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.domain
             .next()
-            .and_then(|i| Some(RI::from(i, &self.rules)))
+            .and_then(|i| Some(RangeVariant::from(i, &self.rules)))
     }
 }
 
@@ -64,6 +64,6 @@ impl<DI: DomainItem, D: Domain<DI, RI> + DoubleEndedIterator, RI: RangeItem<DI>>
     fn next_back(&mut self) -> Option<Self::Item> {
         self.domain
             .next_back()
-            .and_then(|i| Some(RI::from(i, &self.rules)))
+            .and_then(|i| Some(RangeVariant::from(i, &self.rules)))
     }
 }
