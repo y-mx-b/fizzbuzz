@@ -7,4 +7,4 @@ use std::fmt::{Debug, Display};
 pub trait FizzBuzzableItem: Clone + Debug + Sized + PartialOrd + Ord + PartialEq + Eq + Display {}
 impl<T: Clone + Debug + Sized + PartialOrd + Ord + PartialEq + Eq + Display> FizzBuzzableItem for T {}
 
-pub trait FizzBuzzable<T: FizzBuzzableItem, O: FizzBuzzed<T, Self>>: Iterator<Item = T> + Sized{}
+pub trait FizzBuzzable<T: FizzBuzzableItem, O: FizzBuzzed<T>>: Iterator<Item = T> + Sized{}

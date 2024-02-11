@@ -7,7 +7,7 @@ mod default_input;
 pub use builder::{FizzBuzzBuilder, FizzBuzzBuilderError};
 pub use traits::*;
 
-use std::{collections::BTreeMap, marker::PhantomData};
+use std::collections::BTreeMap;
 
 /// An iterable type that applies a rule to a range of inputs and returns a
 /// vector of the resulting outputs that match which rule applications matched
@@ -20,7 +20,7 @@ use std::{collections::BTreeMap, marker::PhantomData};
 ///
 /// ```rust
 /// # use fizzbuzz::*;
-/// let fb: FizzBuzz<u32, _, _> = FizzBuzzBuilder::default().build();
+/// let fb: FizzBuzz<u32, _, _> = FizzBuzzBuilder::default().domain(1..100).build();
 /// for v in fb {
 ///     println!("{:?}", v);
 /// }
@@ -29,20 +29,20 @@ pub struct FizzBuzz<T, I, O>
 where
     T: FizzBuzzableItem,
     I: FizzBuzzable<T, O>,
-    O: FizzBuzzed<T, I>,
+    O: FizzBuzzed<T>,
 {
     domain: I,
     map: BTreeMap<T, O>,
     rule: Box<dyn Fn(T, T) -> bool>,
 }
 
-impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>> FizzBuzz<T, I, O> {
+impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T>> FizzBuzz<T, I, O> {
     /// Evaluate the output of a given input.
     ///
     /// # Example
     /// ```rust
     /// # use fizzbuzz::*;
-    /// let fb: FizzBuzz<u32, _,  _> = FizzBuzzBuilder::default().build();
+    /// let fb: FizzBuzz<u32, _,  _> = FizzBuzzBuilder::default().domain(1..100).build();
     /// let result = fb.result(10).join("");
     /// assert_eq!(result, "buzz");
     /// ```
@@ -51,7 +51,7 @@ impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>> FizzBuzz<T
     }
 }
 
-impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>> Iterator for FizzBuzz<T, I, O> {
+impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T>> Iterator for FizzBuzz<T, I, O> {
     type Item = Vec<O>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -59,9 +59,7 @@ impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>> Iterator f
     }
 }
 
-// TODO: impl doubleendediterator
-
-impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O> + DoubleEndedIterator, O: FizzBuzzed<T, I>> DoubleEndedIterator
+impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O> + DoubleEndedIterator, O: FizzBuzzed<T>> DoubleEndedIterator
     for FizzBuzz<T, I, O>
 {
     fn next_back(&mut self) -> Option<Self::Item> {

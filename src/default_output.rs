@@ -10,7 +10,7 @@ use std::ops::RangeBounds;
 
 macro_rules! impl_fizzbuzzed {
     ($inner:ty, $name:ident) => {
-        impl<R: RangeBounds<$inner> + Iterator<Item = $inner>> FizzBuzzed<$inner, R> for $name {
+        impl FizzBuzzed<$inner> for $name {
             fn from(
                 n: $inner,
                 map: &BTreeMap<$inner, Self>,
