@@ -4,4 +4,4 @@ mod range;
 
 pub use builder::DefaultBuilder;
 pub use domain::{Domain, DomainItem};
-pub use range::{JoinRangeItem, RangeItem, RangeVariant};
+pub use range::{RangeItem, RangeVariant};

@@ -1,15 +1,15 @@
 use super::DomainItem;
 use std::fmt::{Debug, Display};
 
-pub trait RangeItem<DI: DomainItem>: Display + Debug + Sized + Clone {}
-impl<T: Display + Debug + Sized + Clone, DI: DomainItem> RangeItem<DI> for T {}
+pub trait RangeItem: Display + Debug + Sized + Clone {}
+impl<T: Display + Debug + Sized + Clone> RangeItem for T {}
 
-pub enum RangeVariant<DI: DomainItem, RI: RangeItem<DI>> {
+pub enum RangeVariant<DI: DomainItem, RI: RangeItem> {
     Some(Vec<RI>),
     None(DI),
 }
 
-impl<DI: DomainItem, RI: RangeItem<DI>> RangeVariant<DI, RI> {
+impl<DI: DomainItem, RI: RangeItem> RangeVariant<DI, RI> {
     pub fn from(di: DI, rules: &[Box<dyn Fn(&DI) -> Option<RI>>]) -> Self {
         let mut s = Vec::new();
         for f in rules {
@@ -27,17 +27,11 @@ impl<DI: DomainItem, RI: RangeItem<DI>> RangeVariant<DI, RI> {
             RangeVariant::Some(s)
         }
     }
-}
 
-pub trait JoinRangeItem<DI: DomainItem, RI: RangeItem<DI>> {
-    fn join(&self, sep: &str) -> String;
-}
-
-impl<DI: DomainItem, RI: RangeItem<DI>> JoinRangeItem<DI, RI> for Vec<RI> {
-    fn join(&self, sep: &str) -> String {
-        self.iter()
-            .map(|v| v.to_string())
-            .collect::<Vec<String>>()
-            .join(sep)
+    pub fn join(&self, sep: &str) -> String {
+        match self {
+            RangeVariant::Some(v) => v.iter().map(|ri| ri.to_string()).collect::<Vec<String>>().join(sep),
+            RangeVariant::None(di) => di.to_string(),
+        }
     }
 }

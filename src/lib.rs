@@ -27,13 +27,13 @@ pub struct FizzBuzz<DI, D, RI>
 where
     DI: DomainItem,
     D: Domain<DI, RI>,
-    RI: RangeItem<DI>,
+    RI: RangeItem,
 {
     domain: D,
     rules: Vec<Box<dyn Fn(&DI) -> Option<RI>>>,
 }
 
-impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>> FizzBuzz<DI, D, RI> {
+impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem> FizzBuzz<DI, D, RI> {
     /// Evaluate the output of a given input.
     ///
     /// # Example
@@ -48,7 +48,7 @@ impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>> FizzBuzz<DI, D, RI> {
     }
 }
 
-impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>> Iterator for FizzBuzz<DI, D, RI> {
+impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem> Iterator for FizzBuzz<DI, D, RI> {
     type Item = RangeVariant<DI, RI>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -58,7 +58,7 @@ impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>> Iterator for FizzBuzz
     }
 }
 
-impl<DI: DomainItem, D: Domain<DI, RI> + DoubleEndedIterator, RI: RangeItem<DI>> DoubleEndedIterator
+impl<DI: DomainItem, D: Domain<DI, RI> + DoubleEndedIterator, RI: RangeItem> DoubleEndedIterator
     for FizzBuzz<DI, D, RI>
 {
     fn next_back(&mut self) -> Option<Self::Item> {
