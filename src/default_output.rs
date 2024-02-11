@@ -53,7 +53,6 @@ macro_rules! impl_default_output {
         pub enum $name {
             Fizz,
             Buzz,
-            Num($type),
         }
 
         impl fmt::Display for $name {
@@ -64,7 +63,6 @@ macro_rules! impl_default_output {
                     match self {
                         $name::Fizz => String::from("fizz"),
                         $name::Buzz => String::from("buzz"),
-                        $name::Num(n) => format!("{}", n),
                     }
                 )
             }
