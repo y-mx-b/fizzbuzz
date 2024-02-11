@@ -6,6 +6,7 @@ use crate::*;
 /// [Typestate](https://willcrichton.net/rust-api-type-patterns/typestate.html)
 /// pattern to guarantee a build will not fail. Thus, you can only call the
 /// [build](crate::FizzBuzzBuilder::build) method once the builder is properly
+/// initialized.
 pub struct FizzBuzzBuilder<DI: DomainItem, D: Domain<DI>, RI: RangeItem, const DOMAIN: bool> {
     pub(crate) domain: Option<D>,
     pub(crate) rules: Vec<Box<dyn Fn(&DI) -> Option<RI>>>,
@@ -46,7 +47,7 @@ impl<DI: DomainItem, D: Domain<DI>, RI: RangeItem, const DOMAIN: bool>
         }
     }
 
-    /// Set the domain upon which [FizzBuzz] will act upon.
+    /// Set the domain that [FizzBuzz] will act upon.
     pub fn domain(mut self, domain: D) -> FizzBuzzBuilder<DI, D, RI, true> {
         self.domain = Some(domain);
         self.state::<true>()
@@ -82,6 +83,10 @@ impl<DI: DomainItem, D: Domain<DI>, RI: RangeItem, const DOMAIN: bool>
 }
 
 impl<DI: DomainItem, D: Domain<DI>, RI: RangeItem> FizzBuzzBuilder<DI, D, RI, true> {
+    /// Build the [FizzBuzzBuilder] and return a [FizzBuzz] object.
+    /// 
+    /// This method can only be called once the builder is properly initialized.
+    /// If a domain has not been provided, then this method cannot be called.
     pub fn build(self) -> FizzBuzz<DI, D, RI> {
         FizzBuzz {
             domain: self.domain.expect("Used typestate to ensure success."),
