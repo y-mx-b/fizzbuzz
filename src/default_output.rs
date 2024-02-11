@@ -1,26 +1,22 @@
 use crate::builder::BuilderState;
 use crate::traits::*;
 use crate::FizzBuzzBuilder;
-use std::collections::BTreeMap;
 use std::fmt;
 use std::marker::PhantomData;
 use std::ops::RangeBounds;
 
-// TODO: use RangeBounds instead to generalize
 
 macro_rules! impl_fizzbuzzed {
     ($inner:ty, $name:ident) => {
         impl RangeItem<$inner> for $name {
-            fn from(
-                n: $inner,
-                map: &BTreeMap<$inner, Self>,
-                rule: &impl Fn($inner, $inner) -> bool,
-            ) -> Vec<Self> {
+            fn from(n: $inner, rules: &[Box<dyn Fn($inner) -> Self>]) -> Vec<Self> {
                 let mut output = Vec::new();
-
-                for &divis in map.keys() {
-                    if rule(n, divis) {
-                        output.push(map.get(&divis).unwrap().clone());
+                for f in rules.iter() {
+                    match f(n) {
+                        $name::Fizz | $name::Buzz => {
+                            output.push(f(n));
+                        }
+                        _ => {}
                     }
                 }
 
@@ -31,7 +27,7 @@ macro_rules! impl_fizzbuzzed {
                 output
             }
         }
-    }
+    };
 }
 
 macro_rules! impl_default_builder {
@@ -39,22 +35,33 @@ macro_rules! impl_default_builder {
         impl<R: RangeBounds<$inner> + Iterator<Item = $inner>> DefaultBuilder<$inner, R, $name>
             for FizzBuzzBuilder<$inner, R, $name, BuilderState<false, false, false>>
         {
-            fn default_map() -> BTreeMap<$inner, $name> {
-                BTreeMap::from([(3, $name::Fizz), (5, $name::Buzz)])
-            }
-            fn default_rule() -> Box<dyn Fn($inner, $inner) -> bool> {
-                Box::new(|n, divis| n % divis == 0)
+            fn default_rules() -> Vec<Box<dyn Fn($inner) -> $name>> {
+                vec![
+                    Box::new(|n| {
+                        if n % 3 == 0 {
+                            $name::Fizz
+                        } else {
+                            $name::Num(n)
+                        }
+                    }),
+                    Box::new(|n| {
+                        if n % 5 == 0 {
+                            $name::Buzz
+                        } else {
+                            $name::Num(n)
+                        }
+                    }),
+                ]
             }
             fn default() -> FizzBuzzBuilder<$inner, R, $name, BuilderState<true, true, false>> {
                 FizzBuzzBuilder {
                     _state: PhantomData,
                     domain: None,
-                    map: Some(Self::default_map()),
-                    rule: Some(Self::default_rule()),
+                    rules: Self::default_rules(),
                 }
             }
         }
-    }
+    };
 }
 
 macro_rules! impl_default_output {
@@ -87,7 +94,7 @@ macro_rules! impl_default_output {
         }
 
         impl_fizzbuzzed!($type, $name);
-        
+
         impl_default_builder!($type, $name);
     };
 }

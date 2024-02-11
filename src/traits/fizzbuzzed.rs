@@ -1,9 +1,8 @@
 use super::DomainItem;
-use std::collections::BTreeMap;
 use std::fmt::{Debug, Display};
 
 pub trait RangeItem<T: DomainItem>: Display + Debug + Sized + Clone {
-    fn from(n: T, map: &BTreeMap<T, Self>, rule: &impl Fn(T, T) -> bool) -> Vec<Self>; // TODO: rename this function
+    fn from(n: T, rules: &[Box<dyn Fn(T) -> Self>]) -> Vec<Self>; // TODO: rename this function
 }
 
 pub trait JoinRangeItem<T: DomainItem, O: RangeItem<T>> {

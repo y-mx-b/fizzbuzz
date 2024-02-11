@@ -4,20 +4,16 @@ pub use error::FizzBuzzBuilderError;
 
 use crate::traits::*;
 use crate::FizzBuzz;
-use std::collections::BTreeMap;
 use std::marker::PhantomData;
 
 /// A builder for the [FizzBuzz] struct.
 pub struct FizzBuzzBuilder<T: DomainItem, I: Domain<T, O>, O: RangeItem<T>, BuilderState> {
     pub(crate) _state: PhantomData<BuilderState>,
     pub(crate) domain: Option<I>,
-    pub(crate) map: Option<BTreeMap<T, O>>,
-    pub(crate) rule: Option<Box<dyn Fn(T, T) -> bool>>,
+    pub(crate) rules: Vec<Box<dyn Fn(T) -> O>>,
 }
 
-pub struct BuilderState<const MAP: bool, const RULE: bool, const DOMAIN: bool>(
-    PhantomData<bool>,
-);
+pub struct BuilderState<const MAP: bool, const RULE: bool, const DOMAIN: bool>(PhantomData<bool>);
 
 impl<T: DomainItem, I: Domain<T, O>, O: RangeItem<T>>
     FizzBuzzBuilder<T, I, O, BuilderState<false, false, false>>
@@ -26,8 +22,7 @@ impl<T: DomainItem, I: Domain<T, O>, O: RangeItem<T>>
         Self {
             _state: PhantomData,
             domain: None,
-            map: None,
-            rule: None,
+            rules: Vec::new(),
         }
     }
 }
@@ -47,47 +42,22 @@ impl<
         FizzBuzzBuilder::<T, I, O, BuilderState<M, R, D>> {
             _state: PhantomData,
             domain: self.domain,
-            map: self.map,
-            rule: self.rule,
+            rules: self.rules,
         }
     }
 
-    pub fn domain(
-        mut self,
-        domain: I,
-    ) -> FizzBuzzBuilder<T, I, O, BuilderState<MAP, RULE, true>>
-    {
+    pub fn domain(mut self, domain: I) -> FizzBuzzBuilder<T, I, O, BuilderState<MAP, RULE, true>> {
         self.domain = Some(domain);
         self.state::<MAP, RULE, true>()
     }
 
-    pub fn add_mapping(
-        mut self,
-        input: T,
-        output: O,
-    ) -> FizzBuzzBuilder<T, I, O, BuilderState<true, RULE, DOMAIN>> {
-        match &mut self.map {
-            Some(m) => {
-                m.insert(input, output);
-            }
-            None => {
-                self.map = Some(BTreeMap::from([(input, output)]));
-            }
-        }
-
-        Self::state::<true, RULE, DOMAIN>(self)
+    pub fn add_rule(mut self, rule: impl Fn(T) -> O + 'static) -> Self {
+        self.rules.push(Box::new(rule));
+        self
     }
 
-    pub fn map<const N: usize>(
-        mut self,
-        map: [(T, O); N],
-    ) -> FizzBuzzBuilder<T, I, O, BuilderState<true, RULE, DOMAIN>> {
-        self.map = Some(BTreeMap::from(map));
-        Self::state::<true, RULE, DOMAIN>(self)
-    }
-
-    pub fn rule(mut self, rule: impl Fn(T, T) -> bool + 'static) -> Self {
-        self.rule = Some(Box::new(rule));
+    pub fn rules(mut self, rules: Vec<Box<dyn Fn(T) -> O>>) -> Self {
+        self.rules = rules;
         self
     }
 }
@@ -98,8 +68,7 @@ impl<T: DomainItem, I: Domain<T, O>, O: RangeItem<T>>
     pub fn build(self) -> FizzBuzz<T, I, O> {
         FizzBuzz {
             domain: self.domain.expect("Used typestate to ensure success."),
-            map: self.map.expect("Used typestate to ensure success."),
-            rule: self.rule.expect("Used typestate to ensure success."),
+            rules: self.rules,
         }
     }
 }
