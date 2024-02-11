@@ -45,10 +45,9 @@ macro_rules! impl_default_output {
         #[derive(Debug, Clone)]
         /// An auto-generated default output type for the matching primitive integer type.
         ///
-        /// With the default mappings and rules, [Fizz](Self::Fizz) will be selected as
-        /// an output if the input is a multiple of 3 while [Buzz](Self::Buzz) will be
-        /// selected as an output if the input is a multiple of 5. Otherwise, [Num](Self::Num)
-        /// will be returned.
+        /// With the default rules, [Fizz](Self::Fizz) will be selected as an output if 
+        /// the input is a multiple of 3 while [Buzz](Self::Buzz) will be selected as 
+        /// an output if the input is a multiple of 5. 
         pub enum $name {
             Fizz,
             Buzz,

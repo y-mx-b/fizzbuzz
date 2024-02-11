@@ -6,13 +6,13 @@ use crate::*;
 /// [Typestate](https://willcrichton.net/rust-api-type-patterns/typestate.html)
 /// pattern to guarantee a build will not fail. Thus, you can only call the
 /// [build](crate::FizzBuzzBuilder::build) method once the builder is properly
-pub struct FizzBuzzBuilder<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem, const DOMAIN: bool>
+pub struct FizzBuzzBuilder<DI: DomainItem, D: Domain<DI>, RI: RangeItem, const DOMAIN: bool>
 {
     pub(crate) domain: Option<D>,
     pub(crate) rules: Vec<Box<dyn Fn(&DI) -> Option<RI>>>,
 }
 
-impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem> FizzBuzzBuilder<DI, D, RI, false> {
+impl<DI: DomainItem, D: Domain<DI>, RI: RangeItem> FizzBuzzBuilder<DI, D, RI, false> {
     /// Create a new, empty builder.
     /// 
     /// # Example
@@ -36,7 +36,7 @@ impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem> FizzBuzzBuilder<DI, D, RI
     }
 }
 
-impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem, const DOMAIN: bool>
+impl<DI: DomainItem, D: Domain<DI>, RI: RangeItem, const DOMAIN: bool>
     FizzBuzzBuilder<DI, D, RI, DOMAIN>
 {
     /// Explicitly mark the builder as either having a domain or not having a domain.
@@ -82,7 +82,7 @@ impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem, const DOMAIN: bool>
     }
 }
 
-impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem> FizzBuzzBuilder<DI, D, RI, true> {
+impl<DI: DomainItem, D: Domain<DI>, RI: RangeItem> FizzBuzzBuilder<DI, D, RI, true> {
     pub fn build(self) -> FizzBuzz<DI, D, RI> {
         FizzBuzz {
             domain: self.domain.expect("Used typestate to ensure success."),
