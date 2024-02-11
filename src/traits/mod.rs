@@ -1,7 +1,7 @@
 mod builder;
-mod fizzbuzzable;
-mod fizzbuzzed;
+mod domain;
+mod range;
 
 pub use builder::DefaultBuilder;
-pub use fizzbuzzable::{Domain, DomainItem};
-pub use fizzbuzzed::{JoinRangeItem, RangeItem};
+pub use domain::{Domain, DomainItem};
+pub use range::{JoinRangeItem, RangeItem};
