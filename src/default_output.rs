@@ -45,7 +45,7 @@ macro_rules! impl_fizzbuzzed {
 macro_rules! impl_default_builder_inner {
     ($inner:ty, $range:ty, $domain:expr, $name:ident) => {
         impl DefaultBuilder<$inner, $range, $name>
-            for FizzBuzzBuilder<$inner, $range, $name, BuilderState<false, false, false, false>>
+            for FizzBuzzBuilder<$inner, $range, $name, BuilderState<false, false, false>>
         {
             fn default_map() -> BTreeMap<$inner, $name> {
                 BTreeMap::from([(3, $name::Fizz), (5, $name::Buzz)])
@@ -53,10 +53,10 @@ macro_rules! impl_default_builder_inner {
             fn default_rule() -> Box<dyn Fn($inner, $inner) -> bool> {
                 Box::new(|n, divis| n % divis == 0)
             }
-            fn default() -> FizzBuzzBuilder<$inner, $range, $name, BuilderState<true, true, true, true>> {
+            fn default() -> FizzBuzzBuilder<$inner, $range, $name, BuilderState<true, true, false>> {
                 FizzBuzzBuilder {
                     _state: PhantomData,
-                    domain: Some($domain),
+                    domain: None,
                     map: Some(Self::default_map()),
                     rule: Some(Self::default_rule()),
                 }

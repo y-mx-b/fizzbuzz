@@ -1,11 +1,9 @@
 use crate::traits::*;
-use std::ops::{Range, RangeFrom, RangeInclusive};
+use std::ops::RangeBounds;
 
 macro_rules! impl_fizzbuzzable {
     ($type:ty) => {
-        impl<O: FizzBuzzed<$type, Self>> FizzBuzzable<$type, O> for Range<$type> {}
-        impl<O: FizzBuzzed<$type, Self>> FizzBuzzable<$type, O> for RangeFrom<$type> {}
-        impl<O: FizzBuzzed<$type, Self>> FizzBuzzable<$type, O> for RangeInclusive<$type> {}
+        impl<O: FizzBuzzed<$type, Self>, R: RangeBounds<$type> + Iterator<Item = $type>> FizzBuzzable<$type, O> for R {}
     };
 }
 

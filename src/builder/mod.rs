@@ -6,7 +6,6 @@ use crate::traits::*;
 use crate::FizzBuzz;
 use std::collections::BTreeMap;
 use std::marker::PhantomData;
-// use std::ops::{Bound, RangeBounds};
 
 /// A builder for the [FizzBuzz] struct.
 pub struct FizzBuzzBuilder<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>, BuilderState> {
@@ -16,12 +15,12 @@ pub struct FizzBuzzBuilder<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBu
     pub(crate) rule: Option<Box<dyn Fn(T, T) -> bool>>,
 }
 
-pub struct BuilderState<const MAP: bool, const RULE: bool, const START: bool, const END: bool>(
+pub struct BuilderState<const MAP: bool, const RULE: bool, const DOMAIN: bool>(
     PhantomData<bool>,
 );
 
 impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>>
-    FizzBuzzBuilder<T, I, O, BuilderState<false, false, false, false>>
+    FizzBuzzBuilder<T, I, O, BuilderState<false, false, false>>
 {
     pub fn new() -> Self {
         Self {
@@ -39,14 +38,13 @@ impl<
         O: FizzBuzzed<T, I>,
         const MAP: bool,
         const RULE: bool,
-        const START: bool,
-        const END: bool,
-    > FizzBuzzBuilder<T, I, O, BuilderState<MAP, RULE, START, END>>
+        const DOMAIN: bool,
+    > FizzBuzzBuilder<T, I, O, BuilderState<MAP, RULE, DOMAIN>>
 {
-    fn set_state<const M: bool, const R: bool, const S: bool, const E: bool>(
+    fn state<const M: bool, const R: bool, const D: bool>(
         self,
-    ) -> FizzBuzzBuilder<T, I, O, BuilderState<M, R, S, E>> {
-        FizzBuzzBuilder::<T, I, O, BuilderState<M, R, S, E>> {
+    ) -> FizzBuzzBuilder<T, I, O, BuilderState<M, R, D>> {
+        FizzBuzzBuilder::<T, I, O, BuilderState<M, R, D>> {
             _state: PhantomData,
             domain: self.domain,
             map: self.map,
@@ -54,53 +52,20 @@ impl<
         }
     }
 
-    // pub fn range<R: RangeBounds<I>>(
-    //     mut self,
-    //     range: R,
-    // ) -> Result<FizzBuzzBuilder<I, O, BuilderState<MAP, RULE, true, true>>, FizzBuzzBuilderError>
-    // {
-    //     let validate = |b: Bound<&I>, d, is_start: bool| match b {
-    //         Bound::Included(n) => Ok(Some(n.clone())),
-    //         Bound::Excluded(n) => Ok(Some(if is_start { n.succ() } else { n.pred() })),
-    //         Bound::Unbounded => match d {
-    //             Some(n) => Ok(Some(n)),
-    //             None => {
-    //                 if is_start {
-    //                     Err(FizzBuzzBuilderError::InvalidUnboundedStart)
-    //                 } else {
-    //                     Err(FizzBuzzBuilderError::InvalidUnboundedEnd)
-    //                 }
-    //             }
-    //         },
-    //     };
-
-    //     let start = validate(range.start_bound(), <I as FizzBuzzable<O>>::min(), true);
-    //     let end = validate(range.end_bound(), <I as FizzBuzzable<O>>::max(), false);
-
-    //     match (start, end) {
-    //         (Ok(s), Ok(e)) => {
-    //             self.start = s;
-    //             self.end = e;
-
-    //             Ok(Self::set_state::<MAP, RULE, true, true>(self))
-    //         }
-    //         (Ok(s), Err(err)) => {
-    //             self.start = s;
-    //             Err(err)
-    //         }
-    //         (Err(err), Ok(e)) => {
-    //             self.end = e;
-    //             Err(err)
-    //         }
-    //         (Err(e1), Err(e2)) => Err(FizzBuzzBuilderError::InvalidUnboundedBounds),
-    //     }
-    // }
+    pub fn domain(
+        mut self,
+        domain: I,
+    ) -> FizzBuzzBuilder<T, I, O, BuilderState<MAP, RULE, true>>
+    {
+        self.domain = Some(domain);
+        self.state::<MAP, RULE, true>()
+    }
 
     pub fn add_mapping(
         mut self,
         input: T,
         output: O,
-    ) -> FizzBuzzBuilder<T, I, O, BuilderState<true, RULE, START, END>> {
+    ) -> FizzBuzzBuilder<T, I, O, BuilderState<true, RULE, DOMAIN>> {
         match &mut self.map {
             Some(m) => {
                 m.insert(input, output);
@@ -110,25 +75,25 @@ impl<
             }
         }
 
-        Self::set_state::<true, RULE, START, END>(self)
+        Self::state::<true, RULE, DOMAIN>(self)
     }
 
-    pub fn set_map<const N: usize>(
+    pub fn map<const N: usize>(
         mut self,
         map: [(T, O); N],
-    ) -> FizzBuzzBuilder<T, I, O, BuilderState<true, RULE, START, END>> {
+    ) -> FizzBuzzBuilder<T, I, O, BuilderState<true, RULE, DOMAIN>> {
         self.map = Some(BTreeMap::from(map));
-        Self::set_state::<true, RULE, START, END>(self)
+        Self::state::<true, RULE, DOMAIN>(self)
     }
 
-    pub fn set_rule(mut self, rule: impl Fn(T, T) -> bool + 'static) -> Self {
+    pub fn rule(mut self, rule: impl Fn(T, T) -> bool + 'static) -> Self {
         self.rule = Some(Box::new(rule));
         self
     }
 }
 
 impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>>
-    FizzBuzzBuilder<T, I, O, BuilderState<true, true, true, true>>
+    FizzBuzzBuilder<T, I, O, BuilderState<true, true, true>>
 {
     pub fn build(self) -> FizzBuzz<T, I, O> {
         FizzBuzz {
