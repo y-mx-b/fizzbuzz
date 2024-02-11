@@ -118,13 +118,13 @@ impl_default_output!(i32, Fromi32);
 impl_default_output!(i64, Fromi64);
 #[cfg(feature = "signed_output")]
 impl_default_output!(i128, Fromi128);
-#[cfg(feature = "signed_input")]
+#[cfg(feature = "unsigned_output")]
 impl_default_output!(u8, Fromu8);
-#[cfg(feature = "signed_input")]
+#[cfg(feature = "unsigned_output")]
 impl_default_output!(u16, Fromu16);
-#[cfg(feature = "signed_input")]
+#[cfg(feature = "unsigned_output")]
 impl_default_output!(u32, Fromu32);
-#[cfg(feature = "signed_input")]
+#[cfg(feature = "unsigned_output")]
 impl_default_output!(u64, Fromu64);
-#[cfg(feature = "signed_input")]
+#[cfg(feature = "unsigned_output")]
 impl_default_output!(u128, Fromu128);
