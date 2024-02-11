@@ -8,7 +8,7 @@ use std::collections::BTreeMap;
 use std::marker::PhantomData;
 
 /// A builder for the [FizzBuzz] struct.
-pub struct FizzBuzzBuilder<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T>, BuilderState> {
+pub struct FizzBuzzBuilder<T: DomainItem, I: Domain<T, O>, O: RangeItem<T>, BuilderState> {
     pub(crate) _state: PhantomData<BuilderState>,
     pub(crate) domain: Option<I>,
     pub(crate) map: Option<BTreeMap<T, O>>,
@@ -19,7 +19,7 @@ pub struct BuilderState<const MAP: bool, const RULE: bool, const DOMAIN: bool>(
     PhantomData<bool>,
 );
 
-impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T>>
+impl<T: DomainItem, I: Domain<T, O>, O: RangeItem<T>>
     FizzBuzzBuilder<T, I, O, BuilderState<false, false, false>>
 {
     pub fn new() -> Self {
@@ -33,9 +33,9 @@ impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T>>
 }
 
 impl<
-        T: FizzBuzzableItem,
-        I: FizzBuzzable<T, O>,
-        O: FizzBuzzed<T>,
+        T: DomainItem,
+        I: Domain<T, O>,
+        O: RangeItem<T>,
         const MAP: bool,
         const RULE: bool,
         const DOMAIN: bool,
@@ -92,7 +92,7 @@ impl<
     }
 }
 
-impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T>>
+impl<T: DomainItem, I: Domain<T, O>, O: RangeItem<T>>
     FizzBuzzBuilder<T, I, O, BuilderState<true, true, true>>
 {
     pub fn build(self) -> FizzBuzz<T, I, O> {

@@ -1,16 +1,16 @@
-use super::FizzBuzzableItem;
+use super::DomainItem;
 use std::collections::BTreeMap;
 use std::fmt::{Debug, Display};
 
-pub trait FizzBuzzed<T: FizzBuzzableItem>: Display + Debug + Sized + Clone {
+pub trait RangeItem<T: DomainItem>: Display + Debug + Sized + Clone {
     fn from(n: T, map: &BTreeMap<T, Self>, rule: &impl Fn(T, T) -> bool) -> Vec<Self>; // TODO: rename this function
 }
 
-pub trait JoinFizzBuzzed<T: FizzBuzzableItem, O: FizzBuzzed<T>> {
+pub trait JoinRangeItem<T: DomainItem, O: RangeItem<T>> {
     fn join(&self, sep: &str) -> String;
 }
 
-impl<T: FizzBuzzableItem, O: FizzBuzzed<T>> JoinFizzBuzzed<T, O> for Vec<O> {
+impl<T: DomainItem, O: RangeItem<T>> JoinRangeItem<T, O> for Vec<O> {
     fn join(&self, sep: &str) -> String {
         self.iter()
             .map(|v| v.to_string())

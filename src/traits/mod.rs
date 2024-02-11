@@ -3,5 +3,5 @@ mod fizzbuzzable;
 mod fizzbuzzed;
 
 pub use builder::DefaultBuilder;
-pub use fizzbuzzable::{FizzBuzzable, FizzBuzzableItem};
-pub use fizzbuzzed::{FizzBuzzed, JoinFizzBuzzed};
+pub use fizzbuzzable::{Domain, DomainItem};
+pub use fizzbuzzed::{RangeItem, JoinRangeItem};

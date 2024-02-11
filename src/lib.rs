@@ -27,16 +27,16 @@ use std::collections::BTreeMap;
 /// ```
 pub struct FizzBuzz<T, I, O>
 where
-    T: FizzBuzzableItem,
-    I: FizzBuzzable<T, O>,
-    O: FizzBuzzed<T>,
+    T: DomainItem,
+    I: Domain<T, O>,
+    O: RangeItem<T>,
 {
     domain: I,
     map: BTreeMap<T, O>,
     rule: Box<dyn Fn(T, T) -> bool>,
 }
 
-impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T>> FizzBuzz<T, I, O> {
+impl<T: DomainItem, I: Domain<T, O>, O: RangeItem<T>> FizzBuzz<T, I, O> {
     /// Evaluate the output of a given input.
     ///
     /// # Example
@@ -51,7 +51,7 @@ impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T>> FizzBuzz<T, I
     }
 }
 
-impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T>> Iterator for FizzBuzz<T, I, O> {
+impl<T: DomainItem, I: Domain<T, O>, O: RangeItem<T>> Iterator for FizzBuzz<T, I, O> {
     type Item = Vec<O>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -59,7 +59,7 @@ impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T>> Iterator for 
     }
 }
 
-impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O> + DoubleEndedIterator, O: FizzBuzzed<T>> DoubleEndedIterator
+impl<T: DomainItem, I: Domain<T, O> + DoubleEndedIterator, O: RangeItem<T>> DoubleEndedIterator
     for FizzBuzz<T, I, O>
 {
     fn next_back(&mut self) -> Option<Self::Item> {
