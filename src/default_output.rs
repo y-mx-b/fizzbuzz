@@ -33,7 +33,7 @@ macro_rules! impl_fizzbuzzed {
 macro_rules! impl_default_builder {
     ($inner:ty, $name:ident) => {
         impl<R: RangeBounds<$inner> + Iterator<Item = $inner>> DefaultBuilder<$inner, R, $name>
-            for FizzBuzzBuilder<$inner, R, $name, BuilderState<false, false, false>>
+            for FizzBuzzBuilder<$inner, R, $name, BuilderState<false, false>>
         {
             fn default_rules() -> Vec<Box<dyn Fn($inner) -> $name>> {
                 vec![
@@ -53,7 +53,7 @@ macro_rules! impl_default_builder {
                     }),
                 ]
             }
-            fn default() -> FizzBuzzBuilder<$inner, R, $name, BuilderState<true, true, false>> {
+            fn default() -> FizzBuzzBuilder<$inner, R, $name, BuilderState<true, false>> {
                 FizzBuzzBuilder {
                     _state: PhantomData,
                     domain: None,

@@ -4,7 +4,7 @@ mod default_input;
 pub mod default_output;
 pub mod traits;
 
-pub use builder::{FizzBuzzBuilder, FizzBuzzBuilderError};
+pub use builder::FizzBuzzBuilder;
 pub use traits::*;
 
 ///
@@ -31,7 +31,7 @@ where
     rules: Vec<Box<dyn Fn(DI) -> RI>>,
 }
 
-impl<'a, T: DomainItem, I: Domain<T, O>, O: RangeItem<T>> FizzBuzz<T, I, O> {
+impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>> FizzBuzz<DI, D, RI> {
     /// Evaluate the output of a given input.
     ///
     /// # Example
@@ -41,27 +41,27 @@ impl<'a, T: DomainItem, I: Domain<T, O>, O: RangeItem<T>> FizzBuzz<T, I, O> {
     /// let result = fb.result(10).join("");
     /// assert_eq!(result, "buzz");
     /// ```
-    pub fn result(&self, n: T) -> Vec<O> {
-        O::from(n, &self.rules)
+    pub fn result(&self, n: DI) -> Vec<RI> {
+        RI::from(n, &self.rules)
     }
 }
 
-impl<'a, T: DomainItem, I: Domain<T, O>, O: RangeItem<T>> Iterator for FizzBuzz<T, I, O> {
-    type Item = Vec<O>;
+impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>> Iterator for FizzBuzz<DI, D, RI> {
+    type Item = Vec<RI>;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.domain
             .next()
-            .and_then(|i| Some(O::from(i, &self.rules)))
+            .and_then(|i| Some(RI::from(i, &self.rules)))
     }
 }
 
-impl<'a, T: DomainItem, I: Domain<T, O> + DoubleEndedIterator, O: RangeItem<T>> DoubleEndedIterator
-    for FizzBuzz<T, I, O>
+impl<DI: DomainItem, D: Domain<DI, RI> + DoubleEndedIterator, RI: RangeItem<DI>> DoubleEndedIterator
+    for FizzBuzz<DI, D, RI>
 {
     fn next_back(&mut self) -> Option<Self::Item> {
         self.domain
             .next_back()
-            .and_then(|i| Some(O::from(i, &self.rules)))
+            .and_then(|i| Some(RI::from(i, &self.rules)))
     }
 }

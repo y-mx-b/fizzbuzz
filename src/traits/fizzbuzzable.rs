@@ -7,4 +7,4 @@ use std::fmt::{Debug, Display};
 pub trait DomainItem: Clone + Debug + Sized + PartialOrd + Ord + PartialEq + Eq + Display {}
 impl<T: Clone + Debug + Sized + PartialOrd + Ord + PartialEq + Eq + Display> DomainItem for T {}
 
-pub trait Domain<T: DomainItem, O: RangeItem<T>>: Iterator<Item = T> + Sized {}
+pub trait Domain<DI: DomainItem, RI: RangeItem<DI>>: Iterator<Item = DI> + Sized {}

@@ -3,7 +3,7 @@ use std::ops::RangeBounds;
 
 macro_rules! impl_fizzbuzzable {
     ($type:ty) => {
-        impl<O: RangeItem<$type>, R: RangeBounds<$type> + Iterator<Item = $type>> Domain<$type, O>
+        impl<RI: RangeItem<$type>, R: RangeBounds<$type> + Iterator<Item = $type>> Domain<$type, RI>
             for R
         {
         }

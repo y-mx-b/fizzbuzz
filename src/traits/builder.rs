@@ -2,7 +2,7 @@ use crate::builder::BuilderState;
 use crate::traits::*;
 use crate::FizzBuzzBuilder;
 
-pub trait DefaultBuilder<T: DomainItem, I: Domain<T, O>, O: RangeItem<T>> {
-    fn default_rules() -> Vec<Box<dyn Fn(T) -> O>>;
-    fn default() -> FizzBuzzBuilder<T, I, O, BuilderState<true, true, false>>;
+pub trait DefaultBuilder<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>> {
+    fn default_rules() -> Vec<Box<dyn Fn(DI) -> RI>>;
+    fn default() -> FizzBuzzBuilder<DI, D, RI, BuilderState<true, false>>;
 }

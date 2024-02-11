@@ -1,15 +1,15 @@
 use super::DomainItem;
 use std::fmt::{Debug, Display};
 
-pub trait RangeItem<T: DomainItem>: Display + Debug + Sized + Clone {
-    fn from(n: T, rules: &[Box<dyn Fn(T) -> Self>]) -> Vec<Self>; // TODO: rename this function
+pub trait RangeItem<DI: DomainItem>: Display + Debug + Sized + Clone {
+    fn from(n: DI, rules: &[Box<dyn Fn(DI) -> Self>]) -> Vec<Self>; // TODO: rename this function
 }
 
-pub trait JoinRangeItem<T: DomainItem, O: RangeItem<T>> {
+pub trait JoinRangeItem<DI: DomainItem, RI: RangeItem<DI>> {
     fn join(&self, sep: &str) -> String;
 }
 
-impl<T: DomainItem, O: RangeItem<T>> JoinRangeItem<T, O> for Vec<O> {
+impl<DI: DomainItem, RI: RangeItem<DI>> JoinRangeItem<DI, RI> for Vec<RI> {
     fn join(&self, sep: &str) -> String {
         self.iter()
             .map(|v| v.to_string())
