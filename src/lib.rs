@@ -1,45 +1,50 @@
 //! # FizzBuzz
-//! 
+//!
 //! A very serious implementation of FizzBuzz in Rust.
-//! 
+//!
 //! # Why?
-//! 
+//!
 //! Given that FizzBuzz is really just a mapping between two sets, I decided
 //! to try to create as general a solution to FizzBuzz as possible. Thus, this
 //! monstrosity of generics galore was born.
-//! 
+//!
 //! # Usage
-//! 
+//!
 //! Here's a classic FizzBuzz solution using this library.
-//! 
+//!
 //! ```rust
 //! use fizzbuzz::*;
-//! 
+//!
 //! fn main() {
 //!     let fb = FizzBuzzBuilder::default().domain(1..100).build();
-//! 
+//!
 //!     for i in fb {
 //!         println!("{}", i.join(""));
 //!     }
 //! }
 //! ```
-//! 
-//! Given that the crate, by default, provides implementations for all of 
-//! Rust's integer primitives, you can use the 
-//! [default constructor](crate::default_builder) to create a new builder.
+//!
+//! Given that the crate, by default, provides implementations for all of
+//! Rust's integer primitives, you can use the
+//! [default constructor](crate::default_builder) to create a new builder
+//! and then provide a range for the [domain]. After that, just call the
+//! [build](crate::FizzBuzzBuilder::build) method to create a new [FizzBuzz]
+//! object and iterate over it. Use the [join](crate::RangeVariant::join)
+//! method to get a string representation and tada! FizzBuzz! 
+
 
 pub mod builder;
+pub mod default_builder;
 #[cfg(any(feature = "signed_output", feature = "unsigned_output"))]
 pub mod default_output;
-pub mod default_builder;
-pub mod traits;
 pub mod domain;
 pub mod range;
+pub mod traits;
 
 pub use builder::FizzBuzzBuilder;
+pub use default_builder::DefaultBuilder;
 pub use domain::{Domain, DomainItem};
 pub use range::{RangeItem, RangeVariant};
-pub use default_builder::DefaultBuilder;
 
 /// An iterator that maps a given set ([Domain]) to a set of [RangeItem] according
 /// to a given set of rules.

@@ -6,17 +6,16 @@ use crate::*;
 /// [Typestate](https://willcrichton.net/rust-api-type-patterns/typestate.html)
 /// pattern to guarantee a build will not fail. Thus, you can only call the
 /// [build](crate::FizzBuzzBuilder::build) method once the builder is properly
-pub struct FizzBuzzBuilder<DI: DomainItem, D: Domain<DI>, RI: RangeItem, const DOMAIN: bool>
-{
+pub struct FizzBuzzBuilder<DI: DomainItem, D: Domain<DI>, RI: RangeItem, const DOMAIN: bool> {
     pub(crate) domain: Option<D>,
     pub(crate) rules: Vec<Box<dyn Fn(&DI) -> Option<RI>>>,
 }
 
 impl<DI: DomainItem, D: Domain<DI>, RI: RangeItem> FizzBuzzBuilder<DI, D, RI, false> {
     /// Create a new, empty builder.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```rust
     /// # use fizzbuzz::*;
     /// # use fizzbuzz::default_output::Fromu32;
@@ -60,9 +59,9 @@ impl<DI: DomainItem, D: Domain<DI>, RI: RangeItem, const DOMAIN: bool>
     }
 
     /// Overwrite the current rules with the given ones.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```rust
     /// # use fizzbuzz::*;
     /// # use fizzbuzz::default_output::Fromu32;

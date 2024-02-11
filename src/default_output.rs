@@ -3,8 +3,7 @@ use std::fmt;
 use std::ops::RangeBounds;
 
 macro_rules! impl_fizzbuzzed {
-    ($inner:ty, $name:ident) => {
-    };
+    ($inner:ty, $name:ident) => {};
 }
 
 macro_rules! impl_default_builder {
@@ -14,20 +13,8 @@ macro_rules! impl_default_builder {
         {
             fn default_rules() -> Vec<Box<dyn Fn(&$inner) -> Option<$name>>> {
                 vec![
-                    Box::new(|n| {
-                        if n % 3 == 0 {
-                            Some($name::Fizz)
-                        } else {
-                            None
-                        }
-                    }),
-                    Box::new(|n| {
-                        if n % 5 == 0 {
-                            Some($name::Buzz)
-                        } else {
-                            None
-                        }
-                    }),
+                    Box::new(|n| if n % 3 == 0 { Some($name::Fizz) } else { None }),
+                    Box::new(|n| if n % 5 == 0 { Some($name::Buzz) } else { None }),
                 ]
             }
             fn default() -> FizzBuzzBuilder<$inner, R, $name, false> {
@@ -45,9 +32,9 @@ macro_rules! impl_default_output {
         #[derive(Debug, Clone)]
         /// An auto-generated default output type for the matching primitive integer type.
         ///
-        /// With the default rules, [Fizz](Self::Fizz) will be selected as an output if 
-        /// the input is a multiple of 3 while [Buzz](Self::Buzz) will be selected as 
-        /// an output if the input is a multiple of 5. 
+        /// With the default rules, [Fizz](Self::Fizz) will be selected as an output if
+        /// the input is a multiple of 3 while [Buzz](Self::Buzz) will be selected as
+        /// an output if the input is a multiple of 5.
         pub enum $name {
             Fizz,
             Buzz,

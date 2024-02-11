@@ -31,7 +31,11 @@ impl<DI: DomainItem, RI: RangeItem> RangeVariant<DI, RI> {
 
     pub fn join(&self, sep: &str) -> String {
         match self {
-            RangeVariant::Some(v) => v.iter().map(|ri| ri.to_string()).collect::<Vec<String>>().join(sep),
+            RangeVariant::Some(v) => v
+                .iter()
+                .map(|ri| ri.to_string())
+                .collect::<Vec<String>>()
+                .join(sep),
             RangeVariant::None(di) => di.to_string(),
         }
     }
