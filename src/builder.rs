@@ -23,7 +23,7 @@ impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem> FizzBuzzBuilder<DI, D, RI
     /// # use fizzbuzz::default_output::Fromu32;
     /// let fb = FizzBuzzBuilder::new()
     ///             .domain(1..100)
-    ///             .rule(|n| if n % 3 == 0 { Fromu32::Fizz } else { Fromu32::Num(n) })
+    ///             .rule(|n| if n % 3 == 0 { Some(Fromu32::Fizz) } else { None })
     ///             .build();
     /// for i in fb {
     ///     println!("{}", i.join(""));
@@ -70,7 +70,7 @@ impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem, const DOMAIN: bool>
     /// let fb = FizzBuzzBuilder::new()
     ///             .domain(1..100)
     ///             .rules(vec![
-    ///                 Box::new(|n| if n % 3 == 0 { Fromu32::Fizz } else { Fromu32::Num(n) })
+    ///                 Box::new(|n| if n % 3 == 0 { Some(Fromu32::Fizz) } else { None })
     ///             ])
     ///             .build();
     /// for i in fb {

@@ -4,6 +4,7 @@ use std::fmt::{Debug, Display};
 pub trait RangeItem: Display + Debug + Sized + Clone {}
 impl<T: Display + Debug + Sized + Clone> RangeItem for T {}
 
+#[derive(Debug, Clone)]
 pub enum RangeVariant<DI: DomainItem, RI: RangeItem> {
     Some(Vec<RI>),
     None(DI),
