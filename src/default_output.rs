@@ -4,13 +4,13 @@ use crate::FizzBuzzBuilder;
 use std::collections::BTreeMap;
 use std::fmt;
 use std::marker::PhantomData;
-use std::ops::{Range, RangeFrom, RangeInclusive};
+use std::ops::RangeBounds;
 
 // TODO: use RangeBounds instead to generalize
 
-macro_rules! impl_fizzbuzzed_inner {
-    ($inner:ty, $range:ty, $name:ident) => {
-        impl FizzBuzzed<$inner, $range> for $name {
+macro_rules! impl_fizzbuzzed {
+    ($inner:ty, $name:ident) => {
+        impl<R: RangeBounds<$inner> + Iterator<Item = $inner>> FizzBuzzed<$inner, R> for $name {
             fn from(
                 n: $inner,
                 map: &BTreeMap<$inner, Self>,
@@ -34,18 +34,10 @@ macro_rules! impl_fizzbuzzed_inner {
     }
 }
 
-macro_rules! impl_fizzbuzzed {
-    ($type:ty, $name:ident) => {
-        // impl_fizzbuzzed_inner!($type, Range<$type>, $name);
-        // impl_fizzbuzzed_inner!($type, RangeFrom<$type>, $name);
-        impl_fizzbuzzed_inner!($type, RangeInclusive<$type>, $name);
-    }
-}
-
-macro_rules! impl_default_builder_inner {
-    ($inner:ty, $range:ty, $domain:expr, $name:ident) => {
-        impl DefaultBuilder<$inner, $range, $name>
-            for FizzBuzzBuilder<$inner, $range, $name, BuilderState<false, false, false>>
+macro_rules! impl_default_builder {
+    ($inner:ty, $name:ident) => {
+        impl<R: RangeBounds<$inner> + Iterator<Item = $inner>> DefaultBuilder<$inner, R, $name>
+            for FizzBuzzBuilder<$inner, R, $name, BuilderState<false, false, false>>
         {
             fn default_map() -> BTreeMap<$inner, $name> {
                 BTreeMap::from([(3, $name::Fizz), (5, $name::Buzz)])
@@ -53,7 +45,7 @@ macro_rules! impl_default_builder_inner {
             fn default_rule() -> Box<dyn Fn($inner, $inner) -> bool> {
                 Box::new(|n, divis| n % divis == 0)
             }
-            fn default() -> FizzBuzzBuilder<$inner, $range, $name, BuilderState<true, true, false>> {
+            fn default() -> FizzBuzzBuilder<$inner, R, $name, BuilderState<true, true, false>> {
                 FizzBuzzBuilder {
                     _state: PhantomData,
                     domain: None,
@@ -62,14 +54,6 @@ macro_rules! impl_default_builder_inner {
                 }
             }
         }
-    }
-}
-
-macro_rules! impl_default_builder {
-    ($type:ty, $name:ident) => {
-        // impl_default_builder_inner!($type, Range<$type>, 1..100, $name);
-        // impl_default_builder_inner!($type, RangeFrom<$type>, 1.., $name);
-        impl_default_builder_inner!($type, RangeInclusive<$type>, 1..=100, $name);
     }
 }
 
