@@ -1,4 +1,4 @@
-use crate::traits::*;
+use crate::*;
 use std::ops::RangeBounds;
 
 macro_rules! impl_fizzbuzzable {

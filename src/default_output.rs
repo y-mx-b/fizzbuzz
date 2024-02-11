@@ -1,5 +1,4 @@
-use crate::traits::*;
-use crate::FizzBuzzBuilder;
+use crate::*;
 use std::fmt;
 use std::ops::RangeBounds;
 

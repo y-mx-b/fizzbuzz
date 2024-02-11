@@ -1,5 +1,4 @@
-use crate::traits::*;
-use crate::FizzBuzz;
+use crate::*;
 
 /// A builder for the [FizzBuzz] struct.
 ///

@@ -2,10 +2,15 @@ pub mod builder;
 mod default_input;
 #[cfg(any(feature = "signed_output", feature = "unsigned_output"))]
 pub mod default_output;
+pub mod default_builder;
 pub mod traits;
+pub mod domain;
+pub mod range;
 
 pub use builder::FizzBuzzBuilder;
-pub use traits::*;
+pub use domain::{Domain, DomainItem};
+pub use range::{RangeItem, RangeVariant};
+pub use default_builder::DefaultBuilder;
 
 /// An iterator that maps a given set ([Domain]) to a set of [RangeItem] according
 /// to a given set of rules.
