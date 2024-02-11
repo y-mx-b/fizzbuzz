@@ -10,7 +10,7 @@ use crate::FizzBuzz;
 pub struct FizzBuzzBuilder<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>, const DOMAIN: bool>
 {
     pub(crate) domain: Option<D>,
-    pub(crate) rules: Vec<Box<dyn Fn(DI) -> RI>>,
+    pub(crate) rules: Vec<Box<dyn Fn(DI) -> Option<RI>>>,
 }
 
 impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>> FizzBuzzBuilder<DI, D, RI, false> {
@@ -55,7 +55,7 @@ impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>, const DOMAIN: bool>
     }
 
     /// Add a new rule.
-    pub fn rule(mut self, rule: impl Fn(DI) -> RI + 'static) -> Self {
+    pub fn rule(mut self, rule: impl Fn(DI) -> Option<RI> + 'static) -> Self {
         self.rules.push(Box::new(rule));
         self
     }
@@ -77,7 +77,7 @@ impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>, const DOMAIN: bool>
     ///     println!("{}", i.join(""));
     /// }
     /// ```
-    pub fn rules(mut self, rules: Vec<Box<dyn Fn(DI) -> RI>>) -> Self {
+    pub fn rules(mut self, rules: Vec<Box<dyn Fn(DI) -> Option<RI>>>) -> Self {
         self.rules = rules;
         self
     }

@@ -2,7 +2,7 @@ use super::DomainItem;
 use std::fmt::{Debug, Display};
 
 pub trait RangeItem<DI: DomainItem>: Display + Debug + Sized + Clone {
-    fn from(n: DI, rules: &[Box<dyn Fn(DI) -> Self>]) -> Vec<Self>; // TODO: rename this function
+    fn from(n: DI, rules: &[Box<dyn Fn(DI) -> Option<Self>>]) -> Vec<Self>; // TODO: rename this function
 }
 
 pub trait JoinRangeItem<DI: DomainItem, RI: RangeItem<DI>> {

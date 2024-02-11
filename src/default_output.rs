@@ -6,12 +6,12 @@ use std::ops::RangeBounds;
 macro_rules! impl_fizzbuzzed {
     ($inner:ty, $name:ident) => {
         impl RangeItem<$inner> for $name {
-            fn from(n: $inner, rules: &[Box<dyn Fn($inner) -> Self>]) -> Vec<Self> {
+            fn from(n: $inner, rules: &[Box<dyn Fn($inner) -> Option<Self>>]) -> Vec<Self> {
                 let mut output = Vec::new();
                 for f in rules.iter() {
                     match f(n) {
-                        $name::Fizz | $name::Buzz => {
-                            output.push(f(n));
+                        Some(v) => {
+                            output.push(v);
                         }
                         _ => {}
                     }
@@ -32,20 +32,20 @@ macro_rules! impl_default_builder {
         impl<R: RangeBounds<$inner> + Iterator<Item = $inner>> DefaultBuilder<$inner, R, $name>
             for FizzBuzzBuilder<$inner, R, $name, false>
         {
-            fn default_rules() -> Vec<Box<dyn Fn($inner) -> $name>> {
+            fn default_rules() -> Vec<Box<dyn Fn($inner) -> Option<$name>>> {
                 vec![
                     Box::new(|n| {
                         if n % 3 == 0 {
-                            $name::Fizz
+                            Some($name::Fizz)
                         } else {
-                            $name::Num(n)
+                            None
                         }
                     }),
                     Box::new(|n| {
                         if n % 5 == 0 {
-                            $name::Buzz
+                            Some($name::Buzz)
                         } else {
-                            $name::Num(n)
+                            None
                         }
                     }),
                 ]

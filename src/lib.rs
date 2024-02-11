@@ -30,7 +30,7 @@ where
     RI: RangeItem<DI>,
 {
     domain: D,
-    rules: Vec<Box<dyn Fn(DI) -> RI>>,
+    rules: Vec<Box<dyn Fn(DI) -> Option<RI>>>,
 }
 
 impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>> FizzBuzz<DI, D, RI> {
