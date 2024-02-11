@@ -60,3 +60,11 @@ impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>> Iterator f
 }
 
 // TODO: impl doubleendediterator
+
+impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O> + DoubleEndedIterator, O: FizzBuzzed<T, I>> DoubleEndedIterator
+    for FizzBuzz<T, I, O>
+{
+    fn next_back(&mut self) -> Option<Self::Item> {
+        self.domain.next_back().and_then(|i| Some(O::from(i, &self.map, &self.rule)))
+    }
+}
