@@ -1,24 +1,11 @@
 use crate::traits::*;
+use std::ops::{Range, RangeFrom, RangeInclusive};
 
 macro_rules! impl_fizzbuzzable {
     ($type:ty) => {
-        impl<O: FizzBuzzed<Self>> FizzBuzzable<O> for $type {
-            fn min() -> Option<Self> {
-                Some(<$type>::MIN)
-            }
-
-            fn max() -> Option<Self> {
-                Some(<$type>::MAX)
-            }
-
-            fn succ(&self) -> Self {
-                self + 1
-            }
-
-            fn pred(&self) -> Self {
-                self - 1
-            }
-        }
+        impl<O: FizzBuzzed<$type, Self>> FizzBuzzable<$type, O> for Range<$type> {}
+        impl<O: FizzBuzzed<$type, Self>> FizzBuzzable<$type, O> for RangeFrom<$type> {}
+        impl<O: FizzBuzzed<$type, Self>> FizzBuzzable<$type, O> for RangeInclusive<$type> {}
     };
 }
 

@@ -9,18 +9,18 @@ use std::marker::PhantomData;
 // use std::ops::{Bound, RangeBounds};
 
 /// A builder for the [FizzBuzz] struct.
-pub struct FizzBuzzBuilder<T, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>, BuilderState> {
+pub struct FizzBuzzBuilder<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>, BuilderState> {
     pub(crate) _state: PhantomData<BuilderState>,
     pub(crate) domain: Option<I>,
-    pub(crate) map: Option<BTreeMap<I, O>>,
-    pub(crate) rule: Option<Box<dyn Fn(I, I) -> bool>>,
+    pub(crate) map: Option<BTreeMap<T, O>>,
+    pub(crate) rule: Option<Box<dyn Fn(T, T) -> bool>>,
 }
 
 pub struct BuilderState<const MAP: bool, const RULE: bool, const START: bool, const END: bool>(
     PhantomData<bool>,
 );
 
-impl<T, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>>
+impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>>
     FizzBuzzBuilder<T, I, O, BuilderState<false, false, false, false>>
 {
     pub fn new() -> Self {
@@ -34,7 +34,7 @@ impl<T, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>>
 }
 
 impl<
-        T,
+        T: FizzBuzzableItem,
         I: FizzBuzzable<T, O>,
         O: FizzBuzzed<T, I>,
         const MAP: bool,
@@ -98,7 +98,7 @@ impl<
 
     pub fn add_mapping(
         mut self,
-        input: I,
+        input: T,
         output: O,
     ) -> FizzBuzzBuilder<T, I, O, BuilderState<true, RULE, START, END>> {
         match &mut self.map {
@@ -115,19 +115,19 @@ impl<
 
     pub fn set_map<const N: usize>(
         mut self,
-        map: [(I, O); N],
+        map: [(T, O); N],
     ) -> FizzBuzzBuilder<T, I, O, BuilderState<true, RULE, START, END>> {
         self.map = Some(BTreeMap::from(map));
         Self::set_state::<true, RULE, START, END>(self)
     }
 
-    pub fn set_rule(mut self, rule: impl Fn(I, I) -> bool + 'static) -> Self {
+    pub fn set_rule(mut self, rule: impl Fn(T, T) -> bool + 'static) -> Self {
         self.rule = Some(Box::new(rule));
         self
     }
 }
 
-impl<T, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>>
+impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>>
     FizzBuzzBuilder<T, I, O, BuilderState<true, true, true, true>>
 {
     pub fn build(self) -> FizzBuzz<T, I, O> {

@@ -7,7 +7,7 @@ mod default_input;
 pub use builder::{FizzBuzzBuilder, FizzBuzzBuilderError};
 pub use traits::*;
 
-use std::collections::BTreeMap;
+use std::{collections::BTreeMap, marker::PhantomData};
 
 /// An iterable type that applies a rule to a range of inputs and returns a
 /// vector of the resulting outputs that match which rule applications matched
@@ -20,37 +20,38 @@ use std::collections::BTreeMap;
 ///
 /// ```rust
 /// # use fizzbuzz::*;
-/// let fb: FizzBuzz<u32, _> = FizzBuzzBuilder::default().build();
-/// for v in fb.iter() {
+/// let fb: FizzBuzz<u32, _, _> = FizzBuzzBuilder::default().build();
+/// for v in fb {
 ///     println!("{:?}", v);
 /// }
 /// ```
 pub struct FizzBuzz<T, I, O>
 where
+    T: FizzBuzzableItem,
     I: FizzBuzzable<T, O>,
     O: FizzBuzzed<T, I>,
 {
     domain: I,
-    map: BTreeMap<I, O>,
-    rule: Box<dyn Fn(I, I) -> bool>,
+    map: BTreeMap<T, O>,
+    rule: Box<dyn Fn(T, T) -> bool>,
 }
 
-impl<T, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>> FizzBuzz<T, I, O> {
+impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>> FizzBuzz<T, I, O> {
     /// Evaluate the output of a given input.
     ///
     /// # Example
     /// ```rust
     /// # use fizzbuzz::*;
-    /// let fb: FizzBuzz<u32, _> = FizzBuzzBuilder::default().build();
+    /// let fb: FizzBuzz<u32, _,  _> = FizzBuzzBuilder::default().build();
     /// let result = fb.result(10).join("");
     /// assert_eq!(result, "buzz");
     /// ```
-    pub fn result(&self, n: I) -> Vec<O> {
+    pub fn result(&self, n: T) -> Vec<O> {
         O::from(n, &self.map, &self.rule)
     }
 }
 
-impl<T, I: FizzBuzzable<I, O>, O: FizzBuzzed<T, I>> Iterator for FizzBuzz<I, I, O> {
+impl<T: FizzBuzzableItem, I: FizzBuzzable<T, O>, O: FizzBuzzed<T, I>> Iterator for FizzBuzz<T, I, O> {
     type Item = Vec<O>;
 
     fn next(&mut self) -> Option<Self::Item> {
