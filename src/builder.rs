@@ -14,6 +14,21 @@ pub struct FizzBuzzBuilder<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>,
 }
 
 impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>> FizzBuzzBuilder<DI, D, RI, false> {
+    /// Create a new, empty builder.
+    /// 
+    /// # Example
+    /// 
+    /// ```rust
+    /// # use fizzbuzz::*;
+    /// # use fizzbuzz::default_output::Fromu32;
+    /// let fb = FizzBuzzBuilder::new()
+    ///             .domain(1..100)
+    ///             .rule(|n| if n % 3 == 0 { Fromu32::Fizz } else { Fromu32::Num(n) })
+    ///             .build();
+    /// for i in fb {
+    ///     println!("{}", i.join(""));
+    /// }
+    /// ```
     pub fn new() -> Self {
         Self {
             domain: None,
@@ -25,6 +40,7 @@ impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>> FizzBuzzBuilder<DI, D
 impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>, const DOMAIN: bool>
     FizzBuzzBuilder<DI, D, RI, DOMAIN>
 {
+    /// Explicitly mark the builder as either having a domain or not having a domain.
     fn state<const NEW_DOMAIN: bool>(self) -> FizzBuzzBuilder<DI, D, RI, NEW_DOMAIN> {
         FizzBuzzBuilder::<DI, D, RI, NEW_DOMAIN> {
             domain: self.domain,
@@ -32,16 +48,35 @@ impl<DI: DomainItem, D: Domain<DI, RI>, RI: RangeItem<DI>, const DOMAIN: bool>
         }
     }
 
+    /// Set the domain upon which [FizzBuzz] will act upon.
     pub fn domain(mut self, domain: D) -> FizzBuzzBuilder<DI, D, RI, true> {
         self.domain = Some(domain);
         self.state::<true>()
     }
 
-    pub fn add_rule(mut self, rule: impl Fn(DI) -> RI + 'static) -> Self {
+    /// Add a new rule.
+    pub fn rule(mut self, rule: impl Fn(DI) -> RI + 'static) -> Self {
         self.rules.push(Box::new(rule));
         self
     }
 
+    /// Overwrite the current rules with the given ones.
+    /// 
+    /// # Example
+    /// 
+    /// ```rust
+    /// # use fizzbuzz::*;
+    /// # use fizzbuzz::default_output::Fromu32;
+    /// let fb = FizzBuzzBuilder::new()
+    ///             .domain(1..100)
+    ///             .rules(vec![
+    ///                 Box::new(|n| if n % 3 == 0 { Fromu32::Fizz } else { Fromu32::Num(n) })
+    ///             ])
+    ///             .build();
+    /// for i in fb {
+    ///     println!("{}", i.join(""));
+    /// }
+    /// ```
     pub fn rules(mut self, rules: Vec<Box<dyn Fn(DI) -> RI>>) -> Self {
         self.rules = rules;
         self
