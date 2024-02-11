@@ -7,10 +7,12 @@ pub mod traits;
 pub use builder::FizzBuzzBuilder;
 pub use traits::*;
 
+/// An iterator that maps a given set ([Domain]) to a set of [RangeItem] according
+/// to a given set of rules.
 ///
-///
-/// The default implementations for Rust's primitive integer types are available
-/// by default. Matching default output types are provided as well.
+/// Default implementations for Rust's primitive integer types are available
+/// by default, with default output types provided. Refer to the [default_output]
+/// module for more information.
 ///
 /// # Example
 ///

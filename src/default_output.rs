@@ -1,10 +1,7 @@
-use crate::builder::BuilderState;
 use crate::traits::*;
 use crate::FizzBuzzBuilder;
 use std::fmt;
-use std::marker::PhantomData;
 use std::ops::RangeBounds;
-
 
 macro_rules! impl_fizzbuzzed {
     ($inner:ty, $name:ident) => {
@@ -33,7 +30,7 @@ macro_rules! impl_fizzbuzzed {
 macro_rules! impl_default_builder {
     ($inner:ty, $name:ident) => {
         impl<R: RangeBounds<$inner> + Iterator<Item = $inner>> DefaultBuilder<$inner, R, $name>
-            for FizzBuzzBuilder<$inner, R, $name, BuilderState<false, false>>
+            for FizzBuzzBuilder<$inner, R, $name, false>
         {
             fn default_rules() -> Vec<Box<dyn Fn($inner) -> $name>> {
                 vec![
@@ -53,9 +50,8 @@ macro_rules! impl_default_builder {
                     }),
                 ]
             }
-            fn default() -> FizzBuzzBuilder<$inner, R, $name, BuilderState<true, false>> {
+            fn default() -> FizzBuzzBuilder<$inner, R, $name, false> {
                 FizzBuzzBuilder {
-                    _state: PhantomData,
                     domain: None,
                     rules: Self::default_rules(),
                 }
