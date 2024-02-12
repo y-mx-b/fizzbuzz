@@ -10,17 +10,36 @@
 //!
 //! # Usage
 //!
-//! Here's a classic FizzBuzz solution using this library.
-//!
 //! ```rust
 //! use fizzbuzz::*;
+//! use std::fmt;
+//!
+//! // Fizz or Buzz!
+//! #[derive(Debug, Clone)]
+//! enum Output {
+//!     Fizz,
+//!     Buzz
+//! }
+//!
+//! impl fmt::Display for Output {
+//!     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+//!         write!(f, "{}", match self {
+//!             Self::Fizz => "fizz",
+//!             Self::Buzz => "buzz",
+//!         })
+//!     }
+//! }
 //!
 //! fn main() {
-//!     let fb = FizzBuzzBuilder::default().domain(1..100).build();
-//!
-//!     for i in fb {
-//!         println!("{}", i.join(""));
-//!     }
+//!     // A simple, functional FizzBuzz solution!
+//!     FizzBuzzBuilder::new()                                          // create a new FizzBuzzBuilder
+//!         .domain(1u32..100)                                          // set the domain
+//!         .rules(rules![                                              // set the rules
+//!             |n: &_| if n % 3 == 0 { Some(Output::Fizz) } else { None },
+//!             |n: &_| if n % 5 == 0 { Some(Output::Buzz) } else { None },
+//!         ])
+//!         .build()                                                    // build the FizzBuzz iterator
+//!         .for_each(|i| println!("{}", i.join("")));                  // now print!
 //! }
 //! ```
 //!
@@ -31,6 +50,14 @@
 //! [build](crate::FizzBuzzBuilder::build) method to create a new [FizzBuzz]
 //! object and iterate over it. Use the [join](crate::RangeVariant::join)
 //! method to get a string representation and tada! FizzBuzz!
+//!
+//! # Features
+//!
+//! By default, this crate provides the `default_signed` and `default_unsigned`
+//! features, as well as the [DefaultOutput](crate::default_output::DefaultOutput)
+//! type. The `default_signed` feature provides an implementation of [DefaultBuilder]
+//! for signed integers and the [DefaultOutput](crate::default_output::DefaultOutput)
+//! type. The `default_unsigned` feature does the same for unsigned integers.
 
 pub mod builder;
 pub mod default_builder;
@@ -47,21 +74,23 @@ pub use domain::{Domain, DomainItem};
 pub use range::{RangeItem, RangeVariant};
 pub use rule::Rule;
 
-/// An iterator that maps a given set ([Domain]) to a set of [RangeItem] according
-/// to a given set of rules.
+/// An iterator that maps a given set of inputs, [Domain], to a set of
+/// outputs, sets of [RangeItem], according to a given set of rules, of
+/// type [Rule].
 ///
 /// Default implementations for Rust's primitive integer types are available
-/// by default, with default output types provided. Refer to the [default_output]
+/// by default, with a default output type provided. Refer to the [default_output]
 /// module for more information.
 ///
 /// # Example
 ///
 /// ```rust
 /// # use fizzbuzz::*;
-/// let fb: FizzBuzz<u32, _, _> = FizzBuzzBuilder::default().domain(1..100).build();
-/// for v in fb {
-///     println!("{:?}", v);
-/// }
+/// // A simple, functional FizzBuzz solution!
+/// FizzBuzzBuilder::default()
+///     .domain(1..100)
+///     .build()
+///     .for_each(|i| println!("{}", i.join("")));
 /// ```
 pub struct FizzBuzz<DI, D, RI>
 where

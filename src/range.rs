@@ -13,8 +13,8 @@ use crate::*;
 use std::fmt::{Debug, Display};
 
 /// An item within a [RangeVariant].
-pub trait RangeItem: Display + Debug + Sized + Clone {}
-impl<T: Display + Debug + Sized + Clone> RangeItem for T {}
+pub trait RangeItem: Debug + Sized + Clone {}
+impl<T: Debug + Sized + Clone> RangeItem for T {}
 
 /// An enum containing either a set of [RangeItem] or a [DomainItem] depending
 /// on whether at least one rule applies or no rules apply.
@@ -60,7 +60,9 @@ impl<DI: DomainItem, RI: RangeItem> RangeVariant<DI, RI> {
             RangeVariant::Some(s)
         }
     }
+}
 
+impl<DI: DomainItem + Display, RI: RangeItem + Display> RangeVariant<DI, RI> {
     /// Create a [String] representation of the contained [RangeItem] or [DomainItem].
     ///
     /// # Example

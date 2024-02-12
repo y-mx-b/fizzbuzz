@@ -9,13 +9,13 @@
 //!
 //! Regardless, a "domain" here refers to the input set.
 
-use std::fmt::{Debug, Display};
+use std::fmt::Debug;
 
 /// An item within a [Domain].
 ///
 /// A blanket implementation is provided.
-pub trait DomainItem: Clone + Debug + Sized + PartialOrd + Ord + PartialEq + Eq + Display {}
-impl<T: Clone + Debug + Sized + PartialOrd + Ord + PartialEq + Eq + Display> DomainItem for T {}
+pub trait DomainItem: Clone + Debug + Sized + PartialOrd + Ord + PartialEq + Eq {}
+impl<T: Clone + Debug + Sized + PartialOrd + Ord + PartialEq + Eq> DomainItem for T {}
 
 /// An iterator over [DomainItem].
 ///
