@@ -29,5 +29,7 @@ macro_rules! rule {
 
 #[macro_export]
 macro_rules! rules {
-    () => {}
+    ($($fn:expr),* $(,)?) => {
+        vec![$(rule!($fn)),*]
+    };
 }

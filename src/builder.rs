@@ -68,8 +68,8 @@ impl<DI: DomainItem, D: Domain<DI>, RI: RangeItem, const DOMAIN: bool>
     /// # use fizzbuzz::default_output::Fromu32;
     /// let fb = FizzBuzzBuilder::new()
     ///             .domain(1..100)
-    ///             .rules(vec![
-    ///                 Box::new(|n| if n % 3 == 0 { Some(Fromu32::Fizz) } else { None })
+    ///             .rules(rules![
+    ///                 |n: &_| if n % 3 == 0 { Some(Fromu32::Fizz) } else { None }
     ///             ])
     ///             .build();
     /// for i in fb {
@@ -84,7 +84,7 @@ impl<DI: DomainItem, D: Domain<DI>, RI: RangeItem, const DOMAIN: bool>
 
 impl<DI: DomainItem, D: Domain<DI>, RI: RangeItem> FizzBuzzBuilder<DI, D, RI, true> {
     /// Build the [FizzBuzzBuilder] and return a [FizzBuzz] object.
-    /// 
+    ///
     /// This method can only be called once the builder is properly initialized.
     /// If a domain has not been provided, then this method cannot be called.
     pub fn build(self) -> FizzBuzz<DI, D, RI> {

@@ -1,16 +1,16 @@
 //! This module contains traits related to ranges.
-//! 
+//!
 //! # Why "Range?"
-//! 
+//!
 //! The term "range" is used in the mathematical sense throughout this crate.
 //! Given that FizzBuzz is really about mapping one set of input values to another
 //! set of sets of output values, the terms "domain" and "range" are used in the
 //! functional, mathematical sense, though it technically doesn't *really* match.
-//! 
+//!
 //! Regardless, a "range" here refers to the output set.
 
-use std::fmt::{Debug, Display};
 use crate::*;
+use std::fmt::{Debug, Display};
 
 /// An item within a [RangeVariant].
 pub trait RangeItem: Display + Debug + Sized + Clone {}
