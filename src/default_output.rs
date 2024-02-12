@@ -11,10 +11,10 @@ macro_rules! impl_default_builder {
         impl<R: RangeBounds<$inner> + Iterator<Item = $inner>> DefaultBuilder<$inner, R, $name>
             for FizzBuzzBuilder<$inner, R, $name, false>
         {
-            fn default_rules() -> Vec<Box<dyn Fn(&$inner) -> Option<$name>>> {
+            fn default_rules() -> Vec<Rule<$inner, $name>> {
                 vec![
-                    Box::new(|n| if n % 3 == 0 { Some($name::Fizz) } else { None }),
-                    Box::new(|n| if n % 5 == 0 { Some($name::Buzz) } else { None }),
+                    rule!(|n: &$inner| if n % 3 == 0 { Some($name::Fizz) } else { None }),
+                    rule!(|n: &$inner| if n % 5 == 0 { Some($name::Buzz) } else { None }),
                 ]
             }
             fn default() -> FizzBuzzBuilder<$inner, R, $name, false> {

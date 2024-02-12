@@ -40,11 +40,13 @@ pub mod default_output;
 pub mod domain;
 pub mod range;
 pub mod traits;
+pub mod rule;
 
 pub use builder::FizzBuzzBuilder;
 pub use default_builder::DefaultBuilder;
 pub use domain::{Domain, DomainItem};
 pub use range::{RangeItem, RangeVariant};
+pub use rule::Rule;
 
 /// An iterator that maps a given set ([Domain]) to a set of [RangeItem] according
 /// to a given set of rules.
@@ -69,7 +71,7 @@ where
     RI: RangeItem,
 {
     domain: D,
-    rules: Vec<Box<dyn Fn(&DI) -> Option<RI>>>,
+    rules: Vec<Rule<DI, RI>>,
 }
 
 impl<DI: DomainItem, D: Domain<DI>, RI: RangeItem> FizzBuzz<DI, D, RI> {
@@ -83,7 +85,11 @@ impl<DI: DomainItem, D: Domain<DI>, RI: RangeItem> FizzBuzz<DI, D, RI> {
     /// assert_eq!(result, "buzz");
     /// ```
     pub fn result(&self, n: DI) -> RangeVariant<DI, RI> {
-        RangeVariant::from(n, &self.rules)
+        RangeVariant::from(n, &self.rules())
+    }
+
+    pub fn rules(&self) -> &[Rule<DI, RI>] {
+        &self.rules
     }
 }
 
@@ -93,7 +99,7 @@ impl<DI: DomainItem, D: Domain<DI>, RI: RangeItem> Iterator for FizzBuzz<DI, D, 
     fn next(&mut self) -> Option<Self::Item> {
         self.domain
             .next()
-            .and_then(|i| Some(RangeVariant::from(i, &self.rules)))
+            .and_then(|i| Some(RangeVariant::from(i, &self.rules())))
     }
 }
 
@@ -103,6 +109,6 @@ impl<DI: DomainItem, D: Domain<DI> + DoubleEndedIterator, RI: RangeItem> DoubleE
     fn next_back(&mut self) -> Option<Self::Item> {
         self.domain
             .next_back()
-            .and_then(|i| Some(RangeVariant::from(i, &self.rules)))
+            .and_then(|i| Some(RangeVariant::from(i, &self.rules())))
     }
 }

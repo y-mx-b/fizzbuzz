@@ -9,8 +9,8 @@
 //! 
 //! Regardless, a "range" here refers to the output set.
 
-use super::DomainItem;
 use std::fmt::{Debug, Display};
+use crate::*;
 
 /// An item within a [RangeVariant].
 pub trait RangeItem: Display + Debug + Sized + Clone {}
@@ -28,10 +28,10 @@ pub enum RangeVariant<DI: DomainItem, RI: RangeItem> {
 
 impl<DI: DomainItem, RI: RangeItem> RangeVariant<DI, RI> {
     /// Create a [RangeVariant] given a [DomainItem] and a set of rules.
-    pub fn from(di: DI, rules: &[Box<dyn Fn(&DI) -> Option<RI>>]) -> Self {
+    pub fn from(di: DI, rules: &[Rule<DI, RI>]) -> Self {
         let mut s = Vec::new();
         for f in rules {
-            match f(&di) {
+            match f.call(&di) {
                 Some(ri) => {
                     s.push(ri);
                 }

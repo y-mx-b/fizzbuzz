@@ -1,6 +1,6 @@
 use crate::*;
 
 pub trait DefaultBuilder<DI: DomainItem, D: Domain<DI>, RI: RangeItem> {
-    fn default_rules() -> Vec<Box<dyn Fn(&DI) -> Option<RI>>>;
+    fn default_rules() -> Vec<Rule<DI, RI>>;
     fn default() -> FizzBuzzBuilder<DI, D, RI, false>;
 }
