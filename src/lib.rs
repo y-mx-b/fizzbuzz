@@ -34,7 +34,7 @@
 
 pub mod builder;
 pub mod default_builder;
-#[cfg(any(feature = "signed_output", feature = "unsigned_output"))]
+#[cfg(any(feature = "default_signed", feature = "default_unsigned"))]
 pub mod default_output;
 pub mod domain;
 pub mod range;

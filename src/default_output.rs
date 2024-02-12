@@ -49,23 +49,23 @@ impl fmt::Display for DefaultOutput {
     }
 }
 
-#[cfg(feature = "signed_output")]
+#[cfg(feature = "default_signed")]
 impl_default_builder!(i8, DefaultOutput);
-#[cfg(feature = "signed_output")]
+#[cfg(feature = "default_signed")]
 impl_default_builder!(i16, DefaultOutput);
-#[cfg(feature = "signed_output")]
+#[cfg(feature = "default_signed")]
 impl_default_builder!(i32, DefaultOutput);
-#[cfg(feature = "signed_output")]
+#[cfg(feature = "default_signed")]
 impl_default_builder!(i64, DefaultOutput);
-#[cfg(feature = "signed_output")]
+#[cfg(feature = "default_signed")]
 impl_default_builder!(i128, DefaultOutput);
-#[cfg(feature = "unsigned_output")]
+#[cfg(feature = "default_unsigned")]
 impl_default_builder!(u8, DefaultOutput);
-#[cfg(feature = "unsigned_output")]
+#[cfg(feature = "default_unsigned")]
 impl_default_builder!(u16, DefaultOutput);
-#[cfg(feature = "unsigned_output")]
+#[cfg(feature = "default_unsigned")]
 impl_default_builder!(u32, DefaultOutput);
-#[cfg(feature = "unsigned_output")]
+#[cfg(feature = "default_unsigned")]
 impl_default_builder!(u64, DefaultOutput);
-#[cfg(feature = "unsigned_output")]
+#[cfg(feature = "default_unsigned")]
 impl_default_builder!(u128, DefaultOutput);

@@ -6,8 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [features]
-default = ["signed_output", "unsigned_output"]
-signed_output = []
-unsigned_output = []
+default = ["default_signed", "default_unsigned"]
+default_signed = []
+default_unsigned = []
 
 [dependencies]
