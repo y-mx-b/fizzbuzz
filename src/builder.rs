@@ -55,7 +55,7 @@ impl<DI: DomainItem, D: Domain<DI>, RI: RangeItem, const DOMAIN: bool>
 
     /// Add a new rule.
     pub fn rule(mut self, rule: impl Fn(&DI) -> Option<RI> + 'static) -> Self {
-        self.rules.push(rule!(rule));
+        self.rules.push(Rule::from(rule));
         self
     }
 

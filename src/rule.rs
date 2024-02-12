@@ -3,8 +3,9 @@ use crate::*;
 pub struct Rule<DI: DomainItem, RI: RangeItem>(pub(crate) Box<dyn Fn(&DI) -> Option<RI>>);
 
 impl<DI: DomainItem, RI: RangeItem> Rule<DI, RI> {
+    /// Call the [Rule] with the given [DomainItem].
     pub fn call(&self, di: &DI) -> Option<RI> {
-        self.0.as_ref()(di)
+        self.0(di)
     }
 }
 
@@ -20,16 +21,28 @@ impl<'a, DI: DomainItem, RI: RangeItem> AsRef<dyn Fn(&DI) -> Option<RI> + 'a> fo
     }
 }
 
-#[macro_export]
-macro_rules! rule {
-    ($fn:expr) => {
-        $crate::rule::Rule::from($fn)
-    };
-}
-
+/// Create a vector of [Rule] objects.
+/// 
+/// # Example
+/// 
+/// ```rust
+/// # use fizzbuzz::*;
+/// # use fizzbuzz::default_output::Fromu32;
+/// let fb: FizzBuzz<u32, _, _> = FizzBuzzBuilder::default()
+///     .domain(1..=100)
+///     .rules(rules![
+///         |n: &_| { if n % 3 == 0 { Some(Fromu32::Fizz) } else { None }},
+///         |n: &_| { if n % 5 == 0 { Some(Fromu32::Buzz) } else { None }},
+///      ])
+///     .build();
+/// 
+/// for s in fb {
+///     println!("{}", s.join(""));
+/// }
+/// ```
 #[macro_export]
 macro_rules! rules {
     ($($fn:expr),* $(,)?) => {
-        vec![$(rule!($fn)),*]
+        vec![$(Rule::from($fn)),*]
     };
 }

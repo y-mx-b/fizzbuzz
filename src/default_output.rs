@@ -12,9 +12,9 @@ macro_rules! impl_default_builder {
             for FizzBuzzBuilder<$inner, R, $name, false>
         {
             fn default_rules() -> Vec<Rule<$inner, $name>> {
-                vec![
-                    rule!(|n: &$inner| if n % 3 == 0 { Some($name::Fizz) } else { None }),
-                    rule!(|n: &$inner| if n % 5 == 0 { Some($name::Buzz) } else { None }),
+                rules![
+                    |n: &$inner| if n % 3 == 0 { Some($name::Fizz) } else { None },
+                    |n: &$inner| if n % 5 == 0 { Some($name::Buzz) } else { None },
                 ]
             }
             fn default() -> FizzBuzzBuilder<$inner, R, $name, false> {
