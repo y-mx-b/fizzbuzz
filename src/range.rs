@@ -28,6 +28,14 @@ pub enum RangeVariant<DI: DomainItem, RI: RangeItem> {
 
 impl<DI: DomainItem, RI: RangeItem> RangeVariant<DI, RI> {
     /// Create a [RangeVariant] given a [DomainItem] and a set of rules.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// # use fizzbuzz::*;
+    /// let rv = RangeVariant::from(10, &rules![|n: &u32| if *n == 10 { Some(true) } else { Some(false) }]);
+    /// assert_eq!(rv, RangeVariant::Some(vec![true]));
+    /// ```
     pub fn from(di: DI, rules: &[Rule<DI, RI>]) -> Self {
         let mut s = Vec::new();
         for f in rules {
@@ -58,3 +66,15 @@ impl<DI: DomainItem, RI: RangeItem> RangeVariant<DI, RI> {
         }
     }
 }
+
+impl<DI: DomainItem, RI: RangeItem + PartialEq> PartialEq for RangeVariant<DI, RI> {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (RangeVariant::Some(v1), RangeVariant::Some(v2)) => v1 == v2,
+            (RangeVariant::None(di1), RangeVariant::None(di2)) => di1 == di2,
+            _ => false,
+        }
+    }
+}
+
+impl<DI: DomainItem, RI: RangeItem + Eq> Eq for RangeVariant<DI, RI> {}

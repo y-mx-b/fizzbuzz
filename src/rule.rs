@@ -1,9 +1,20 @@
 use crate::*;
 
+/// A rule used by the [FizzBuzz] iterator to determine the output of a given input.
+///
+/// # But why?
+///
+/// Why did I create a completely new type to house functions? Because I can, deal with it.
 pub struct Rule<DI: DomainItem, RI: RangeItem>(pub(crate) Box<dyn Fn(&DI) -> Option<RI>>);
 
 impl<DI: DomainItem, RI: RangeItem> Rule<DI, RI> {
     /// Call the [Rule] with the given [DomainItem].
+    ///
+    /// ```rust
+    /// # use fizzbuzz::*;
+    /// let rule = Rule::from(|n: &_| Some(n + 1));
+    /// assert_eq!(rule.call(&2), Some(3));
+    /// ```
     pub fn call(&self, di: &DI) -> Option<RI> {
         self.0(di)
     }
@@ -22,9 +33,9 @@ impl<'a, DI: DomainItem, RI: RangeItem> AsRef<dyn Fn(&DI) -> Option<RI> + 'a> fo
 }
 
 /// Create a vector of [Rule] objects.
-/// 
+///
 /// # Example
-/// 
+///
 /// ```rust
 /// # use fizzbuzz::*;
 /// # use fizzbuzz::default_output::Fromu32;
@@ -35,7 +46,7 @@ impl<'a, DI: DomainItem, RI: RangeItem> AsRef<dyn Fn(&DI) -> Option<RI> + 'a> fo
 ///         |n: &_| { if n % 5 == 0 { Some(Fromu32::Buzz) } else { None }},
 ///      ])
 ///     .build();
-/// 
+///
 /// for s in fb {
 ///     println!("{}", s.join(""));
 /// }
