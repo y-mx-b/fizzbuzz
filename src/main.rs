@@ -1,5 +1,5 @@
-use fizzbuzz::*;
 use fizzbuzz::default_output::DefaultOutput;
+use fizzbuzz::*;
 
 fn main() {
     let fb: FizzBuzz<i8, _, _> = FizzBuzzBuilder::default()

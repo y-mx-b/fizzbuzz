@@ -21,6 +21,7 @@
 //!     Buzz
 //! }
 //!
+//! // Implement Display to use the `RangeVariant::join()` method later.
 //! impl fmt::Display for Output {
 //!     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 //!         write!(f, "{}", match self {
@@ -30,16 +31,16 @@
 //!     }
 //! }
 //!
+//! // A simple, functional FizzBuzz solution!
 //! fn main() {
-//!     // A simple, functional FizzBuzz solution!
-//!     FizzBuzzBuilder::new()                                          // create a new FizzBuzzBuilder
-//!         .domain(1u32..100)                                          // set the domain
-//!         .rules(rules![                                              // set the rules
+//!     FizzBuzzBuilder::new()                                              
+//!         .domain(1u32..100)
+//!         .rules(rules![
 //!             |n: &_| if n % 3 == 0 { Some(Output::Fizz) } else { None },
 //!             |n: &_| if n % 5 == 0 { Some(Output::Buzz) } else { None },
 //!         ])
-//!         .build()                                                    // build the FizzBuzz iterator
-//!         .for_each(|i| println!("{}", i.join("")));                  // now print!
+//!         .build()
+//!         .for_each(|i| println!("{}", i.join("")));
 //! }
 //! ```
 //!
