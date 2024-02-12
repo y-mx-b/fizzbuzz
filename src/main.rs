@@ -1,4 +1,5 @@
 use fizzbuzz::*;
+use fizzbuzz::default_output::DefaultOutput;
 
 fn main() {
     let fb: FizzBuzz<i8, _, _> = FizzBuzzBuilder::default()
@@ -8,14 +9,14 @@ fn main() {
         .rules(rules![
             |n: &_| {
                 if n % 3 == 0 {
-                    Some(default_output::Fromi8::Fizz)
+                    Some(DefaultOutput::Fizz)
                 } else {
                     None
                 }
             },
             |n: &_| {
                 if n % 5 == 0 {
-                    Some(default_output::Fromi8::Buzz)
+                    Some(DefaultOutput::Buzz)
                 } else {
                     None
                 }

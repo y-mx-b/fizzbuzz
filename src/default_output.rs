@@ -1,10 +1,8 @@
+//! This module defines a default output type for [FizzBuzz].
+
 use crate::*;
 use std::fmt;
 use std::ops::RangeBounds;
-
-macro_rules! impl_fizzbuzzed {
-    ($inner:ty, $name:ident) => {};
-}
 
 macro_rules! impl_default_builder {
     ($inner:ty, $name:ident) => {
@@ -27,55 +25,47 @@ macro_rules! impl_default_builder {
     };
 }
 
-macro_rules! impl_default_output {
-    ($type:ty, $name:ident) => {
-        #[derive(Debug, Clone)]
-        /// An auto-generated default output type for the matching primitive integer type.
-        ///
-        /// With the default rules, [Fizz](Self::Fizz) will be selected as an output if
-        /// the input is a multiple of 3 while [Buzz](Self::Buzz) will be selected as
-        /// an output if the input is a multiple of 5.
-        pub enum $name {
-            Fizz,
-            Buzz,
-        }
+#[derive(Debug, Clone)]
+/// A default output type.
+///
+/// With the default rules, [Fizz](Self::Fizz) will be selected as an output if
+/// the input is a multiple of 3 while [Buzz](Self::Buzz) will be selected as
+/// an output if the input is a multiple of 5.
+pub enum DefaultOutput {
+    Fizz,
+    Buzz,
+}
 
-        impl fmt::Display for $name {
-            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                write!(
-                    f,
-                    "{}",
-                    match self {
-                        $name::Fizz => String::from("fizz"),
-                        $name::Buzz => String::from("buzz"),
-                    }
-                )
+impl fmt::Display for DefaultOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                DefaultOutput::Fizz => String::from("fizz"),
+                DefaultOutput::Buzz => String::from("buzz"),
             }
-        }
-
-        impl_fizzbuzzed!($type, $name);
-
-        impl_default_builder!($type, $name);
-    };
+        )
+    }
 }
 
 #[cfg(feature = "signed_output")]
-impl_default_output!(i8, Fromi8);
+impl_default_builder!(i8, DefaultOutput);
 #[cfg(feature = "signed_output")]
-impl_default_output!(i16, Fromi16);
+impl_default_builder!(i16, DefaultOutput);
 #[cfg(feature = "signed_output")]
-impl_default_output!(i32, Fromi32);
+impl_default_builder!(i32, DefaultOutput);
 #[cfg(feature = "signed_output")]
-impl_default_output!(i64, Fromi64);
+impl_default_builder!(i64, DefaultOutput);
 #[cfg(feature = "signed_output")]
-impl_default_output!(i128, Fromi128);
+impl_default_builder!(i128, DefaultOutput);
 #[cfg(feature = "unsigned_output")]
-impl_default_output!(u8, Fromu8);
+impl_default_builder!(u8, DefaultOutput);
 #[cfg(feature = "unsigned_output")]
-impl_default_output!(u16, Fromu16);
+impl_default_builder!(u16, DefaultOutput);
 #[cfg(feature = "unsigned_output")]
-impl_default_output!(u32, Fromu32);
+impl_default_builder!(u32, DefaultOutput);
 #[cfg(feature = "unsigned_output")]
-impl_default_output!(u64, Fromu64);
+impl_default_builder!(u64, DefaultOutput);
 #[cfg(feature = "unsigned_output")]
-impl_default_output!(u128, Fromu128);
+impl_default_builder!(u128, DefaultOutput);

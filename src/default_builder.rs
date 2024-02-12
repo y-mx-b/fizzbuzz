@@ -1,3 +1,5 @@
+//! This module defines the [DefaultBuilder] trait.
+
 use crate::*;
 
 pub trait DefaultBuilder<DI: DomainItem, D: Domain<DI>, RI: RangeItem> {

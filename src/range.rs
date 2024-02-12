@@ -1,4 +1,4 @@
-//! This module contains traits related to ranges.
+//! This module contains functionality related to ranges.
 //!
 //! # Why "Range?"
 //!
@@ -16,18 +16,25 @@ use std::fmt::{Debug, Display};
 pub trait RangeItem: Display + Debug + Sized + Clone {}
 impl<T: Display + Debug + Sized + Clone> RangeItem for T {}
 
-/// An enum containing either a [RangeItem] or a [DomainItem] depending
+/// An enum containing either a set of [RangeItem] or a [DomainItem] depending
 /// on whether at least one rule applies or no rules apply.
 #[derive(Debug, Clone)]
 pub enum RangeVariant<DI: DomainItem, RI: RangeItem> {
     /// At least one rule applies.
+    ///
+    /// The input value is discarded and a corresponding set of [RangeItem]
+    /// objects is stored.
     Some(Vec<RI>),
     /// No rules apply.
+    ///
+    /// The input value is stored as-is.
     None(DI),
 }
 
 impl<DI: DomainItem, RI: RangeItem> RangeVariant<DI, RI> {
     /// Create a [RangeVariant] given a [DomainItem] and a set of rules.
+    ///
+    /// The rules will be applied in the order that they are given.
     ///
     /// # Example
     ///
@@ -55,6 +62,24 @@ impl<DI: DomainItem, RI: RangeItem> RangeVariant<DI, RI> {
     }
 
     /// Create a [String] representation of the contained [RangeItem] or [DomainItem].
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// # use fizzbuzz::*;
+    /// let rules = rules![
+    ///     |n: &u32| if n % 3 == 0 { Some("divisible by 3") } else { None },
+    ///     |n: &u32| if n % 4 == 0 { Some("divisible by 4") } else { None },
+    /// ];
+    ///
+    /// let v1 = RangeVariant::from(7, &rules);
+    /// let v2 = RangeVariant::from(6, &rules);
+    /// let v3 = RangeVariant::from(12, &rules);
+    ///
+    /// assert_eq!(v1.join(", "), "7");
+    /// assert_eq!(v2.join(", "), "divisible by 3");
+    /// assert_eq!(v3.join(", "), "divisible by 3, divisible by 4");
+    /// ```
     pub fn join(&self, sep: &str) -> String {
         match self {
             RangeVariant::Some(v) => v

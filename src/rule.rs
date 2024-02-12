@@ -1,6 +1,8 @@
+//! This module contains functionality related to rules.
+
 use crate::*;
 
-/// A rule used by the [FizzBuzz] iterator to determine the output of a given input.
+/// A rule is a function used by the [FizzBuzz] iterator to determine the output of a given input.
 ///
 /// # But why?
 ///
