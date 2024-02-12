@@ -40,12 +40,12 @@ impl<'a, DI: DomainItem, RI: RangeItem> AsRef<dyn Fn(&DI) -> Option<RI> + 'a> fo
 ///
 /// ```rust
 /// # use fizzbuzz::*;
-/// # use fizzbuzz::default_output::Fromu32;
+/// # use fizzbuzz::default_output::DefaultOutput;
 /// let fb: FizzBuzz<u32, _, _> = FizzBuzzBuilder::default()
 ///     .domain(1..=100)
 ///     .rules(rules![
-///         |n: &_| { if n % 3 == 0 { Some(Fromu32::Fizz) } else { None }},
-///         |n: &_| { if n % 5 == 0 { Some(Fromu32::Buzz) } else { None }},
+///         |n: &_| { if n % 3 == 0 { Some(DefaultOutput::Fizz) } else { None }},
+///         |n: &_| { if n % 5 == 0 { Some(DefaultOutput::Buzz) } else { None }},
 ///      ])
 ///     .build();
 ///

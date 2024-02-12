@@ -19,10 +19,10 @@ impl<DI: DomainItem, D: Domain<DI>, RI: RangeItem> FizzBuzzBuilder<DI, D, RI, fa
     ///
     /// ```rust
     /// # use fizzbuzz::*;
-    /// # use fizzbuzz::default_output::Fromu32;
+    /// # use fizzbuzz::default_output::DefaultOutput;
     /// let fb = FizzBuzzBuilder::new()
     ///             .domain(1..100)
-    ///             .rule(|n| if n % 3 == 0 { Some(Fromu32::Fizz) } else { None })
+    ///             .rule(|n| if n % 3 == 0 { Some(DefaultOutput::Fizz) } else { None })
     ///             .build();
     /// for i in fb {
     ///     println!("{}", i.join(""));
@@ -65,11 +65,11 @@ impl<DI: DomainItem, D: Domain<DI>, RI: RangeItem, const DOMAIN: bool>
     ///
     /// ```rust
     /// # use fizzbuzz::*;
-    /// # use fizzbuzz::default_output::Fromu32;
+    /// # use fizzbuzz::default_output::DefaultOutput;
     /// let fb = FizzBuzzBuilder::new()
     ///             .domain(1..100)
     ///             .rules(rules![
-    ///                 |n: &_| if n % 3 == 0 { Some(Fromu32::Fizz) } else { None }
+    ///                 |n: &_| if n % 3 == 0 { Some(DefaultOutput::Fizz) } else { None }
     ///             ])
     ///             .build();
     /// for i in fb {
